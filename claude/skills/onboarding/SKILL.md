@@ -35,6 +35,10 @@ Plans: Starter (free), Pro, Enterprise. Enterprise supports child projects and D
 
 After step 7, load the `readme-api` skill for anything else in the project.
 
+## Doing it with Claude in Chrome
+
+Steps 1 to 5 are all browser work. If the Claude in Chrome extension is connected (`mcp__claude-in-chrome__*` tools are available), offer to drive them in the user's own browser instead of only listing the steps: open the signup page, create the project, upload the API definition, and open the API Keys page. Let the user type credentials and payment details themselves. Steps 6 and 7 stay in the terminal.
+
 ## Reading the docs meanwhile
 
 Use `readme:search` for a question, then `readme:fetch` with the returned id. Useful pages:
