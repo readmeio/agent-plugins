@@ -1,0 +1,30 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "readme",
+  "version": "0.1.0",
+  "description": "ReadMe MCP server packaged as a plugin. Search, read, and update your ReadMe docs and API reference from your editor.",
+  "author": { "name": "ReadMe", "url": "https://readme.com" },
+  "homepage": "https://docs.readme.com/main/docs/readmes-mcp-server",
+  "repository": "https://github.com/readmeio/readme-plugins",
+  "license": "MIT",
+  "keywords": ["readme", "documentation", "mcp", "openapi"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "ReadMe",
+        "shortDescription": "Search, read, and update your ReadMe docs and API reference.",
+        "longDescription": "Connects ChatGPT and Codex to the ReadMe MCP server so the model can list API specs, inspect endpoints, search documentation, and follow ReadMe's documentation workflows.",
+        "developerName": "ReadMe",
+        "category": "Productivity",
+        "capabilities": ["Read"],
+        "websiteURL": "https://readme.com",
+        "privacyPolicyURL": "https://readme.com/privacy",
+        "termsOfServiceURL": "https://readme.com/tos",
+        "defaultPrompt": [
+          "Use ReadMe to list the endpoints in the ReadMe API.",
+          "Use ReadMe to explain how to create a docs branch."
+        ]
+      }
+    }
+  }
+}
