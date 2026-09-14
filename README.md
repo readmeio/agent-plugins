@@ -19,8 +19,6 @@ draft changelog entries, and open documentation updates for review — without l
 3. Select **Install** and choose project or user scope.
 4. Set your **ReadMe API key** when prompted (see below).
 
-Or run `/add-plugin readme` in chat.
-
 ### API key
 
 The server authenticates with a ReadMe API key. Open **Account Settings → API Keys** in ReadMe and
@@ -38,7 +36,6 @@ add a section on refresh tokens."
 {
   "mcpServers": {
     "readme": {
-      "type": "http",
       "url": "https://docs.readme.com/mcp",
       "headers": {
         "Authorization": "Bearer ${README_API_KEY}"
