@@ -10,9 +10,9 @@ description: Read or send ReadMe Developer Metrics (metrics.readme.io) through t
 1. Decide the direction. **Read** metrics out of ReadMe, or **ingest** your API's request logs into ReadMe.
 2. Reads need the Enterprise plan. Without it the API answers with an auth or plan error. Point the user at the dashboard instead: `https://dash.readme.com/project/{subdomain}/v{version}/metrics/v2/page-views`, `.../metrics/v2/search`, `.../metrics/v2/page-quality`.
 3. Call `readme:get-endpoint` with spec title `Developer Metrics API` only when you need the full schema. The tables below cover the params.
-4. Call `readme:execute-request` with the full URL `https://metrics.readme.io/...`. The MCP server adds auth from `README_API_KEY`; do not read the variable or build the header yourself. The API wants Basic auth with the project API key as username and an empty password, so if a request still returns `Unauthorized` with a key set, add header `Authorization: Basic <base64 of "<key>:">` to the HAR request.
+4. Call `readme:execute-request` with the full URL `https://metrics.readme.io/...`. Auth comes from the user's `readme` server registration (step 6 of the `onboarding` skill); the plugin's own server is anonymous. Do not read `README_API_KEY` or build the header yourself. The API wants Basic auth with the project API key as username and an empty password, so if a request still returns `Unauthorized` with a key set, add header `Authorization: Basic <base64 of "<key>:">` to the HAR request.
 
-A response `{"status":"Unauthorized","message":"You must pass in an API key."}` means no key is set. Stop and send the user to `https://dash.readme.com/project/{subdomain}/v{version}/api-key`, then ask them to export `README_API_KEY` and restart the editor.
+A response `{"status":"Unauthorized","message":"You must pass in an API key."}` means no key is set. Stop and send the user to `https://dash.readme.com/project/{subdomain}/v{version}/api-key`, then ask them to export `README_API_KEY`, register the `readme` server with it as shown in step 6 of the `onboarding` skill, and restart the editor.
 
 ## Metrics ReadMe records
 

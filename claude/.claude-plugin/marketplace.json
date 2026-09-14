@@ -1,6 +1,6 @@
 {
   "name": "readme",
-  "description": "ReadMe plugins for Claude Code",
+  "description": "ReadMe plugins for Claude",
   "owner": { "name": "ReadMe", "url": "https://readme.com" },
   "plugins": [
     {
