@@ -4,11 +4,13 @@ on:
   pull_request:
     paths:
       - 'claude/**'
+      - '.claude-plugin/**'
       - '.github/workflows/validate-claude-plugin.yml'
   push:
     branches: [main]
     paths:
       - 'claude/**'
+      - '.claude-plugin/**'
       - '.github/workflows/validate-claude-plugin.yml'
 
 jobs:
@@ -21,4 +23,4 @@ jobs:
           node-version: 22
       - run: npm install -g @anthropic-ai/claude-code
       - run: claude plugin validate --strict claude
-      - run: claude plugin validate --strict claude/.claude-plugin/plugin.json
+      - run: claude plugin validate --strict .claude-plugin/marketplace.json
