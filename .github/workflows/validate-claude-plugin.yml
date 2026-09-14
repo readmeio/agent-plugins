@@ -1,0 +1,24 @@
+name: Validate Claude plugin
+
+on:
+  pull_request:
+    paths:
+      - 'claude/**'
+      - '.github/workflows/validate-claude-plugin.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'claude/**'
+      - '.github/workflows/validate-claude-plugin.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install -g @anthropic-ai/claude-code
+      - run: claude plugin validate --strict claude
+      - run: claude plugin validate --strict claude/.claude-plugin/plugin.json
