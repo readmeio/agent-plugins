@@ -51,7 +51,7 @@ Steps 1 to 5 are all browser work. If the Claude in Chrome extension is connecte
 In Claude Desktop Chat, Cowork and claude.ai you have no shell and cannot add a marketplace, install a plugin or edit MCP config. Do not attempt it and do not ask the user to run commands. If the `readme:*` tools are missing, the user has to install the plugin by hand. Give them these steps exactly:
 
 1. Click **Customize** in the left sidebar, then **Plugins**. In Cowork, open the **Cowork** tab first.
-2. Under **Personal plugins**, click **+** → **Add marketplace** and enter `readmeio/readme-plugins`.
+2. Under **Personal plugins**, click **+** → **Add marketplace** and enter `readmeio/agent-plugins`.
 3. Find **readme** in the list and click **Install**, then start a new chat so the tools load.
 
 Plugins need a paid Claude plan. On Team and Enterprise an owner may have disabled personal marketplaces, in which case they add it under **Organization settings → Plugins**.

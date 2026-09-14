@@ -32,7 +32,7 @@ The Chat and Cowork tabs of Claude Desktop and claude.ai share one plugin system
 ### 1. Open the Plugins page
 Click **Customize** in the left sidebar, then **Plugins**. In Cowork, open the **Cowork** tab first.
 ### 2. Add this plugin's marketplace
-Under **Personal plugins**, click **+** → **Add marketplace** and enter `readmeio/readme-plugins`.
+Under **Personal plugins**, click **+** → **Add marketplace** and enter `readmeio/agent-plugins`.
 ### 3. Install the plugin
 Find **readme** in the list and click **Install**. Open it afterwards to see its skills and the ReadMe connector; each one can be toggled individually.
 ### 4. Use it
