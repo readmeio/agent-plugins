@@ -7,7 +7,7 @@
       "name": "readme",
       "description": "ReadMe MCP server packaged as a plugin. Search, read, and update your ReadMe docs and API reference from your editor.",
       "category": "productivity",
-      "source": "./",
+      "source": "./claude",
       "homepage": "https://docs.readme.com/main/docs/readmes-mcp-server"
     }
   ]

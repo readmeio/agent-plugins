@@ -17,7 +17,7 @@ This plugin allows Claude users to install everything â€” Skills + MCP server â€
 ## Installation (Claude Code)
 ### 1. Add this plugin's marketplace
 In Claude Code, run:
-`/plugin marketplace add readmeio/readme-claude-plugin`
+`/plugin marketplace add readmeio/agent-plugins`
 ### 2. Install the plugin
 `/plugin install readme@readme
 ### 3. Restart Claude Code
