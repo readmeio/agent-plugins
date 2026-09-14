@@ -11,7 +11,6 @@
   "homepage": "https://docs.readme.com/main/docs/readmes-mcp-server",
   "repository": "https://github.com/readmeio/agent-plugins",
   "license": "MIT",
-  "logo": "assets/logo.svg",
   "keywords": [
     "readme",
     "documentation",
