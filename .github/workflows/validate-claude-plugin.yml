@@ -2,16 +2,8 @@ name: Validate Claude plugin
 
 on:
   pull_request:
-    paths:
-      - 'claude/**'
-      - '.claude-plugin/**'
-      - '.github/workflows/validate-claude-plugin.yml'
   push:
     branches: [main]
-    paths:
-      - 'claude/**'
-      - '.claude-plugin/**'
-      - '.github/workflows/validate-claude-plugin.yml'
 
 jobs:
   validate:
