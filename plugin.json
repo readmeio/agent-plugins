@@ -1,0 +1,23 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "readme",
+  "version": "1.0.0",
+  "description": "Search, read, and update your ReadMe docs, API reference, and changelog.",
+  "author": {
+    "name": "ReadMe",
+    "email": "support@readme.io",
+    "url": "https://readme.com"
+  },
+  "homepage": "https://docs.readme.com/main/docs/readmes-mcp-server",
+  "repository": "https://github.com/readmeio/agent-plugins",
+  "license": "MIT",
+  "keywords": [
+    "readme",
+    "documentation",
+    "docs",
+    "api-reference",
+    "openapi",
+    "changelog",
+    "mcp"
+  ]
+}
