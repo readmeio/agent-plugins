@@ -1,0 +1,47 @@
+{
+  "name": "readme",
+  "displayName": "ReadMe",
+  "version": "1.0.0",
+  "minClientVersions": {
+    "cursor": "3.13.0"
+  },
+  "description": "Search, read, and update your ReadMe docs, API reference, and changelog.",
+  "author": {
+    "name": "ReadMe",
+    "email": "support@readme.io"
+  },
+  "homepage": "https://docs.readme.com/main/docs/readmes-mcp-server",
+  "repository": "https://github.com/readmeio/readme-cursor-plugin",
+  "license": "MIT",
+  "keywords": [
+    "readme",
+    "documentation",
+    "docs",
+    "api-reference",
+    "openapi",
+    "changelog",
+    "mcp"
+  ],
+  "category": "integrations",
+  "tags": [
+    "readme",
+    "documentation",
+    "api",
+    "mcp"
+  ],
+  "variables": {
+    "type": "object",
+    "properties": {
+      "README_API_KEY": {
+        "type": "string",
+        "title": "ReadMe API key",
+        "description": "API key from ReadMe Account Settings > API Keys (starts with rdme_). Grants read and write access to the projects the key belongs to."
+      }
+    },
+    "required": [
+      "README_API_KEY"
+    ]
+  },
+  "rules": "./rules/",
+  "mcpServers": "./mcp.json"
+}
