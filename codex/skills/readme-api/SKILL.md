@@ -8,10 +8,10 @@ description: Call the ReadMe API v2 (api.readme.com/v2) through the ReadMe MCP s
 ## Quick Start
 
 1. Confirm the key works: `readme:execute-request` with spec title `ReadMe API`, `GET https://api.readme.com/v2/projects/me`. The response names the project the key belongs to.
-   - A 500 with title `An unknown error has occurred.` means the bearer is empty or invalid. The v2 API does not answer 401 for a missing key. Stop there. Do not probe with curl, `list-specs`, or the Legacy API. Tell the user to create a key at `https://dash.readme.com/project/{subdomain}/v{version}/api-key` (Configuration → API Keys), export it as `README_API_KEY`, and restart the editor.
+   - A 500 with title `An unknown error has occurred.` means the bearer is empty or invalid. The v2 API does not answer 401 for a missing key. Stop there. Do not probe with curl, `list-specs`, or the Legacy API. Tell the user to create a key at `https://dash.readme.com/project/{subdomain}/v{version}/api-key` (Configuration → API Keys), export it as `README_API_KEY`, register the `readme` server with it as shown in step 6 of the `onboarding` skill, and restart the editor. The plugin's own server is anonymous and never sends a key.
 2. Pick the route from the tables below.
 3. Call `readme:get-endpoint` (title `ReadMe API`) only when you need the full request or response schema.
-4. Call `readme:execute-request` with the full URL `https://api.readme.com/v2/...`. The server adds the bearer header from `README_API_KEY`.
+4. Call `readme:execute-request` with the full URL `https://api.readme.com/v2/...`. The bearer header comes from the user's `readme` server registration, never from you; do not read `README_API_KEY` or build the header yourself.
 
 Use `readme:search-endpoints` only when the tables have no match. Never use the `Legacy API` spec (v1) for new work.
 

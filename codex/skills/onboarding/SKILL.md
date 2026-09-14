@@ -30,14 +30,30 @@ Plans: Starter (free), Pro, Enterprise. Enterprise supports child projects and D
 3. Add the API definition under **API Reference**: upload an OpenAPI file, import a URL, build one from scratch, or run `npx rdme openapi upload <file>` from a terminal. ReadMe validates the file and renders every endpoint.
 4. Write the first guide under **Guides**. Use the AI Agent for a draft or the editor for a blank page. A "Getting Started" page is the usual first one.
 5. Generate an API key at **Configuration → API Keys**, URL `https://dash.readme.com/project/{subdomain}/v{version}/api-key`.
-6. Export it as `README_API_KEY` in the shell that starts the editor, then restart the editor so the plugin picks it up.
+6. Attach the key. The plugin's own `readme` server is anonymous and cannot read the key. The user registers a server with the same name, which replaces the plugin's one, then exports the key in the shell that starts Codex and starts a new session. In Codex:
+
+   ```
+   export README_API_KEY=rdme_…
+   codex mcp add readme --url https://docs.readme.com/mcp --bearer-token-env-var README_API_KEY
+   ```
+
+   Codex reads the variable at startup, so the key never lands in a config file. The ChatGPT desktop app shares Codex's config, so this registration also covers Codex sessions there. In Claude Code the equivalent is `claude mcp add --scope user --transport http readme https://docs.readme.com/mcp --header 'Authorization: Bearer ${README_API_KEY}'`. Not possible in ChatGPT web; see the section below.
 7. Verify: `readme:execute-request` with spec title `ReadMe API`, `GET https://api.readme.com/v2/projects/me`. A 200 with the project name means the plugin is wired to the right project. A 500 titled `An unknown error has occurred.` means the key is missing or wrong; go back to step 5.
 
 After step 7, load the `readme-api` skill for anything else in the project.
 
-## Doing it with Claude in Chrome
+## Doing it with the ChatGPT browser
 
-Steps 1 to 5 are all browser work. If the Claude in Chrome extension is connected (`mcp__claude-in-chrome__*` tools are available), offer to drive them in the user's own browser instead of only listing the steps: open the signup page, create the project, upload the API definition, and open the API Keys page. Let the user type credentials and payment details themselves. Steps 6 and 7 stay in the terminal.
+Steps 1 to 5 are all browser work. In the ChatGPT desktop app or ChatGPT web, offer to drive them with `@Browser` instead of only listing the steps: open the signup page, create the project, and open the API Keys page. The built-in browser has its own profile, so the user signs in to ReadMe there and types credentials and payment details themselves; ChatGPT asks before submitting forms. It cannot upload files, so for step 3 import the OpenAPI definition by URL or run `npx rdme openapi upload <file>` from Codex. Codex CLI and the IDE extension have no browser; list the steps there. Steps 6 and 7 stay in the terminal.
+
+## When you cannot install anything yourself
+
+In a ChatGPT chat, desktop or web, you have no shell and cannot add a marketplace, install a plugin or edit MCP config. Do not attempt it and do not ask the user to run commands in the chat. If the `readme:*` tools are missing, the user has to install the plugin by hand. Give them these steps exactly:
+
+- ChatGPT desktop app: open the **Plugins** tab and click **Add marketplace**. Enter `readmeio/readme-plugins` as the source, leave the Git ref as `main` and the sparse paths empty, then click **Add marketplace**. Install **readme** from the new marketplace and start a new chat so the tools load.
+- ChatGPT web: only the plugin directory is available. Until the ReadMe plugin is listed there, send the user to the desktop app or to Codex CLI.
+
+Once installed, the ReadMe connector in a chat is read-only: `readme:search`, `readme:fetch` and the endpoint tools work on public projects, but ChatGPT cannot take an API key, so steps 6 and 7 of the Quick Start do not apply and write tools such as `readme:update-docs` fail. Say so before the user tries. For creating or updating pages, offer to continue in Codex with the server registered as in step 6.
 
 ## Reading the docs meanwhile
 
