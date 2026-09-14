@@ -11,7 +11,7 @@
     "email": "support@readme.io"
   },
   "homepage": "https://docs.readme.com/main/docs/readmes-mcp-server",
-  "repository": "https://github.com/readmeio/readme-cursor-plugin",
+  "repository": "https://github.com/readmeio/agent-plugins",
   "license": "MIT",
   "keywords": [
     "readme",
@@ -42,6 +42,5 @@
       "README_API_KEY"
     ]
   },
-  "rules": "./rules/",
   "mcpServers": "./mcp.json"
 }
