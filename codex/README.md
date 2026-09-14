@@ -7,7 +7,7 @@ Connects ChatGPT and Codex to the [ReadMe MCP server](https://docs.readme.com/ma
 The repository root is a Codex plugin marketplace. Add it, then install the plugin:
 
 ```
-codex plugin marketplace add readmeio/readme-plugins
+codex plugin marketplace add readmeio/agent-plugins
 codex plugin add readme@readme
 ```
 
