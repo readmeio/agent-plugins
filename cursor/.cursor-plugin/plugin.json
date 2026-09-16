@@ -30,5 +30,6 @@
     "api",
     "mcp"
   ],
+  "skills": "./skills/",
   "mcpServers": "./mcp.json"
 }
