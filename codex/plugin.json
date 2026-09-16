@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "readme",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "ReadMe MCP server packaged as a plugin. Search, read, and update your ReadMe docs and API reference from your editor.",
   "author": { "name": "ReadMe", "url": "https://readme.com" },
   "homepage": "https://docs.readme.com/main/docs/readmes-mcp-server",
