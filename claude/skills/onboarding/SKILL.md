@@ -39,6 +39,8 @@ Plans: Starter (free), Pro, Enterprise. Enterprise supports child projects and D
 6. Attach the key. The plugin's own `readme` server is anonymous and cannot read the key. The user registers a server under the same name, which replaces the plugin's one. The command differs per client: use the registration table in the `mcp-auth` skill, which also covers repairing a key that is already set.
 7. Verify: `execute-request` with spec title `ReadMe API`, `GET https://api.readme.com/v2/projects/me`. A 200 with the project name means the plugin is wired to the right project. `Missing Security Schemes` means the registration is sending no key; a 401 titled `The API key couldn't be located.` means the key is wrong; a 500 titled `An unknown error has occurred.` means it resolved to an empty string. In every case, go back to step 5.
 
+After step 7, the `mcp-server` skill covers which spec and which project everything else lands in.
+
 ## Driving the browser yourself
 
 Steps 1 to 5 are all browser work. If you can drive a browser, offer to do them in the user's own browser instead of only listing the steps: open the signup page, create the project, upload the API definition, and open the API Keys page. Let the user type credentials and payment details themselves. Steps 6 and 7 stay in the terminal.

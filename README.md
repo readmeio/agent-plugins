@@ -56,9 +56,10 @@ agent-plugins/
 
 ## Skills
 
-The five skills are agent-agnostic: anything a client does differently — registering an API key,
+The three skills are agent-agnostic: anything a client does differently — registering an API key,
 driving a browser, installing the plugin by hand — is a per-client table inside the shared file, so
-there is one copy of every fact.
+there is one copy of every fact. They carry only what the MCP server cannot tell an agent at
+runtime; route maps come from `list-endpoints` and `get-endpoint`, not from a skill.
 
 Edit `skills/` and nothing else, then regenerate the three published copies:
 

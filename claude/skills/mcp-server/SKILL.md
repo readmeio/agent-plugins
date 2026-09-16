@@ -1,6 +1,6 @@
 ---
 name: mcp-server
-description: Route ReadMe MCP calls to the right project. Use before any request touching the user's own content - "our docs", "my hub", "create a page", "update the changelog", "what endpoints do we have", "search our guides" - and before calling execute-request for the first time in a session.
+description: Route ReadMe MCP calls to the right project and the right spec. Use before any request touching the user's own content - "our docs", "my hub", "create a page", "update the changelog", "what endpoints do we have", "search our guides", "how many page views", "top search terms", "send our API logs to ReadMe" - and before calling execute-request for the first time in a session.
 ---
 
 # Which project does this call land in?
@@ -31,13 +31,26 @@ assuming a tool named here is present, and never assume one that is not.
 | Spec title | Server | Auth |
 | --- | --- | --- |
 | `ReadMe API` | `https://api.readme.com/v2` | Bearer `rdme_...` |
-| `Developer Metrics API` | `https://metrics.readme.io` | Bearer `rdme_...` |
+| `Developer Metrics API` | `https://metrics.readme.io` | HTTP basic, the key as username and an empty password |
 | `Legacy API` | `https://dash.readme.com/api/v1` | HTTP basic |
 
 **Use `ReadMe API` for all work on the user's content.** `Legacy API` is v1: it takes basic auth
 rather than a bearer token, and it is unavailable to projects on ReadMe Refactored. `search-endpoints`
 will surface its routes alongside the others — ignore them. Never fall back to v1 when a v2 call
 fails.
+
+## Finding a route
+
+Do not guess paths or work from memory. `list-endpoints` returns every path and summary in a spec in
+one cheap call; `get-endpoint` adds the full request and response schema for one of them, including
+which routes exist only on ReadMe Refactored. Read them rather than reproducing them here.
+
+Two things the definitions do not tell you:
+
+- Paginated responses carry `paging.next`, `paging.previous`, `paging.first` and `paging.last`.
+  Query with `page` and `per_page`, max 100 and max 50 on search.
+- Enterprise child projects need the child's own key. Only the API-key routes take a `{subdomain}`,
+  and `me` works there.
 
 ## Calling execute-request
 
@@ -75,8 +88,30 @@ than sending them away to configure anything:
 | Read one guide | `GET https://api.readme.com/v2/branches/{branch}/guides/{slug}` |
 | List what is in a category | `GET https://api.readme.com/v2/branches/{branch}/categories/{section}/{title}/pages` |
 
-`{branch}` is a version number, `stable`, or a branch name. The `readme-api` skill carries the full
-route map, so load that before reaching for `search-endpoints`.
+`{branch}` is a version number, `stable`, or a branch name. Everything is branch-scoped except
+changelogs, images, fonts, API keys, search and the project itself.
+
+## Metrics
+
+Page views, search terms and page quality live in the `Developer Metrics API` spec, and reading them
+needs the Enterprise plan — without it the API answers with an auth or plan error rather than saying
+so. The registration sends a bearer token; if a call returns `Unauthorized` with a key set, send
+`Authorization: Basic <base64 of "<key>:">` on the HAR request instead.
+
+Most of what the dashboard shows has no route at all, so check here before going looking:
+
+| Metric | Readable via API |
+| --- | --- |
+| Page views, page quality, search terms | Yes |
+| API calls | No — ingest only, `POST https://metrics.readme.io/request` |
+| MCP tool calls, API errors, top endpoints, new users | No, dashboard only |
+
+For anything in the No rows, send the user to
+`https://dash.readme.com/project/{subdomain}/v{version}/metrics`.
+
+Ingesting the user's own API logs is a server-side integration, not something to hand-build here.
+Point them at the SDK for their stack — `readmeio` (Node), `readme-metrics` (Python, Ruby),
+`readme/metrics` (PHP), `ReadMe.Metrics` (.NET) — and at `fetch` with id `main/sdks`.
 
 ## A different server, when they actually want one
 
