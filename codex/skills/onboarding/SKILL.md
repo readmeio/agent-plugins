@@ -38,7 +38,7 @@ Plans: Starter (free), Pro, Enterprise. Enterprise supports child projects and D
    ```
 
    Codex reads the variable at startup, so the key never lands in a config file. The ChatGPT desktop app shares Codex's config, so this registration also covers Codex sessions there. In Claude Code the equivalent is `claude mcp add --scope user --transport http readme https://docs.readme.com/mcp --header 'Authorization: Bearer ${README_API_KEY}'`. Not possible in ChatGPT web; see the section below.
-7. Verify: `readme:execute-request` with spec title `ReadMe API`, `GET https://api.readme.com/v2/projects/me`. A 200 with the project name means the plugin is wired to the right project. A 500 titled `An unknown error has occurred.` means the key is missing or wrong; go back to step 5.
+7. Verify: `readme:execute-request` with spec title `ReadMe API`, `GET https://api.readme.com/v2/projects/me`. A 200 with the project name means the plugin is wired to the right project. `Missing Security Schemes` means the registration is sending no key; a 401 titled `The API key couldn't be located.` means the key is wrong; a 500 titled `An unknown error has occurred.` means it resolved to an empty string. In every case, go back to step 5.
 
 After step 7, load the `readme-api` skill for anything else in the project.
 
