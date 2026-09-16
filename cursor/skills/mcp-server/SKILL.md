@@ -1,6 +1,6 @@
 ---
 name: mcp-server
-description: Work out which ReadMe project a tool call will hit before making it. Use whenever the user asks to search, read, or change "our docs", "my docs", or a named project through the ReadMe MCP server, and before any write. Explains that this server reads ReadMe's own documentation while writes land on the user's project.
+description: Establish which ReadMe project is in play, and how it is authenticated, before acting on anything of the user's. Use whenever the user mentions "our docs", "my docs", their hub, or a named project, whenever a ReadMe call fails on authentication, and before any write. This server reads ReadMe's own documentation; the user's project is reached only through execute-request and their key.
 ---
 
 # Which project am I touching?
@@ -30,17 +30,51 @@ project's own API definitions, which here means `api.readme.com` and `metrics.re
 own hub is not reachable from this server, so there is no way to read or write their content except
 through the ReadMe API.
 
-## Before any write
+## Start here, before touching anything of theirs
 
-Do not ask the user which project. They cannot change the answer, and the key already decides it.
-Look it up and say it:
+Reading ReadMe's own documentation needs nothing. The moment a request concerns *their* project,
+establish which project it is. Do not guess, and do not quietly answer from ReadMe's docs instead.
 
-1. `execute-request`, spec title `ReadMe API`, `GET https://api.readme.com/v2/projects/me`.
-2. State the project name and subdomain from the response, then make the change.
+**Step 1. Find out whether a key is already attached.** Call `execute-request`, spec title
+`ReadMe API`, `GET https://api.readme.com/v2/projects/me`, and send no `Authorization` header.
 
-A 500 titled `An unknown error has occurred.` means no key is attached. The v2 API does not return
-401 for a missing bearer. Stop and tell the user to register the server with their key, as described
-in the plugin README. Never read `README_API_KEY` yourself or build the header by hand.
+| Result | What it means | Do |
+| --- | --- | --- |
+| A project object | The server registration already carries a key | Name the project and subdomain, then carry on. Never ask for a key |
+| `Missing Security Schemes` | No key anywhere | Go to step 2 |
+
+Do this before asking the user anything. The plugin ships anonymous, but a user who registered their
+own `readme` server has a key on the connection, and asking them for one they already supplied is
+noise.
+
+**Step 2. No key, and no project named.** Stop and ask. Do not pick a project, do not assume the
+user means ReadMe's own docs, and do not start reading guides to infer one. Ask which ReadMe project
+they mean and how they want to authenticate.
+
+While waiting, be clear about what does work unauthenticated: `search` and `fetch` over ReadMe's own
+product documentation, and the reference tools over ReadMe's API definitions. None of their content.
+
+**Step 3. Project known, no key.** Ask for it, and offer the better option first:
+
+- **Preferred:** they register the server with the key themselves, so it never enters the chat. The
+  plugin README has the `~/.cursor/mcp.json` snippet.
+- **Otherwise:** they paste the key and you pass it as an `Authorization: Bearer` header inside the
+  `execute-request` call. This works, but the key is then in the transcript. Say so when it happens,
+  and tell them to rotate it afterwards.
+
+**Step 4. Name the project before you change anything.** Never ask the user which project a write
+lands in. The key already decides, and they cannot override it. State the name and subdomain from
+step 1, then make the change.
+
+## When authentication looks configured but fails
+
+`Missing Security Schemes` while the user believes a key is set almost always means the registration
+carries a placeholder rather than a value: `${env:README_API_KEY}` or `${README_API_KEY}` written
+into `mcp.json` with the environment variable unset, which clients pass through as literal text.
+
+Say that plainly. Ask them to confirm the variable is exported in the environment the editor was
+launched from, and to restart the editor, since the header is resolved once when the server
+connects. Do not work around it by asking for the key in chat before checking.
 
 ## When the user asks about their own docs
 
@@ -69,6 +103,7 @@ conversation.
 
 Ask yourself which of these a request needs before choosing a tool:
 
-- **How does ReadMe work?** → `search` and `fetch`. Correct server, no key needed.
-- **What is in my hub?** → not `search`. Use `execute-request` against `api.readme.com/v2`.
-- **Change something in my project** → `execute-request` with their key, after naming the project.
+- **How does ReadMe work?** → `search` and `fetch`. Correct server, no key needed, no project to establish.
+- **What is in my hub?** → not `search`. Run the step 1 probe, then `execute-request` against `api.readme.com/v2`.
+- **Change something in my project** → `execute-request`, after naming the project from step 1.
+- **No project named and no key?** → ask. Never default to ReadMe's own docs and present it as theirs.
