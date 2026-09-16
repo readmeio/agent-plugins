@@ -30,9 +30,11 @@ agent-plugins/
 ├── .cursor-plugin/marketplace.json   # Cursor marketplace  → cursor
 ├── .claude-plugin/marketplace.json   # Claude marketplace  → ./claude
 ├── .agents/plugins/marketplace.json  # Codex marketplace   → ./codex
+├── skills/                           # Canonical skills — edit these
 ├── cursor/
 │   ├── .cursor-plugin/plugin.json
 │   ├── mcp.json
+│   ├── skills/                       # Generated from ../skills
 │   ├── assets/logo.svg
 │   ├── README.md
 │   ├── CHANGELOG.md
@@ -40,16 +42,32 @@ agent-plugins/
 ├── claude/
 │   ├── .claude-plugin/plugin.json
 │   ├── .mcp.json
-│   ├── skills/
+│   ├── skills/                       # Generated from ../skills
 │   └── README.md
 ├── codex/
 │   ├── plugin.json                   # Agent Plugins 1.0.0 manifest
 │   ├── mcp.json
-│   ├── skills/
+│   ├── skills/                       # Generated from ../skills
 │   └── README.md
+├── scripts/
 ├── README.md
 └── LICENSE
 ```
+
+## Skills
+
+The five skills are agent-agnostic: anything a client does differently — registering an API key,
+driving a browser, installing the plugin by hand — is a per-client table inside the shared file, so
+there is one copy of every fact.
+
+Edit `skills/` and nothing else, then regenerate the three published copies:
+
+```
+node scripts/sync-skills.mjs
+```
+
+CI runs `node scripts/sync-skills.mjs --check` and fails if a client copy has drifted. Each client
+ships its own directory because each marketplace submission reads only that directory.
 
 ## Authentication
 

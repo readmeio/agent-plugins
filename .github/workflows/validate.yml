@@ -1,0 +1,29 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Skills are identical across clients
+        run: node scripts/sync-skills.mjs --check
+
+      - name: Skill frontmatter and size
+        run: node scripts/validate-skills.mjs
+
+      - name: Claude plugin manifest
+        run: |
+          if command -v claude >/dev/null 2>&1; then
+            claude plugin validate ./claude
+          else
+            echo "::warning::claude CLI not available, skipping plugin validation"
+          fi
