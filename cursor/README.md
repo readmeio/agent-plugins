@@ -3,8 +3,12 @@
 Cursor plugin that connects agents to [ReadMe](https://readme.com) through ReadMe's remote
 [Model Context Protocol](https://modelcontextprotocol.io/) server at `https://docs.readme.com/mcp`.
 
-Search your guides and API reference, inspect your OpenAPI specs, draft changelog entries, and open
-documentation updates for review — without leaving the editor.
+Ask how ReadMe works, look up the ReadMe API, and drive your own project through that API with your
+key, without leaving the editor.
+
+The server is bound to one project by its hostname, and this one is ReadMe's own documentation. So
+`search` and `fetch` answer questions *about ReadMe*, while your project is reached through
+`execute-request` and your key. The `mcp-server` skill keeps the agent straight on that.
 
 ## Install
 
@@ -44,8 +48,9 @@ there. Teams and Enterprise plans only.
 Public read access works without any setup, so the plugin ships no credential and asks for nothing
 on install.
 
-Write tools such as `update-docs` need your ReadMe API key. Register the server yourself once with
-the key, and your `readme` entry replaces the plugin's anonymous one:
+Anything that changes your project goes through `execute-request` against `api.readme.com`, and that
+needs your ReadMe API key. Register the server yourself once with the key, and your `readme` entry
+replaces the plugin's anonymous one:
 
 ```json
 {
@@ -68,32 +73,43 @@ it. Rotate it from Account Settings if it is ever exposed.
 
 ## What agents can do
 
-| Tool               | What it does                                                         |
-| ------------------ | -------------------------------------------------------------------- |
-| `search`           | Search guide pages, reference pages, and docs content by keyword     |
-| `fetch`            | Retrieve a specific guide or reference page by ID                    |
-| `update-docs`      | Open a documentation update on a new branch and return a review link |
-| `list-specs`       | List the OpenAPI specs available in the project                      |
-| `search-endpoints` | Search paths, operations, and parameters                             |
-| `list-endpoints`   | List all API paths and HTTP methods with summaries                   |
-| `get-endpoint`     | Get detail on one endpoint, including security schemes and servers   |
-| `execute-request`  | Execute an API request from a HAR request object                     |
-| `draft-changelog`  | Generate a changelog draft from merged GitHub PRs                    |
+| Tool               | What it does                                                       | Reads or acts on   |
+| ------------------ | ------------------------------------------------------------------ | ------------------ |
+| `search`           | Search guides, reference pages, and docs content by keyword         | ReadMe's own docs  |
+| `fetch`            | Retrieve a specific guide or reference page by ID                   | ReadMe's own docs  |
+| `list-specs`       | List the OpenAPI specs available                                    | ReadMe's own specs |
+| `list-endpoints`   | List all API paths and HTTP methods with summaries                  | ReadMe's own specs |
+| `search-endpoints` | Search paths, operations, and parameters                            | ReadMe's own specs |
+| `get-endpoint`     | Detail on one endpoint, including security schemes and servers      | ReadMe's own specs |
+| `execute-request`  | Execute a real API request                                          | **Your project**   |
+| `update-docs`      | Returns instructions for updating docs, for the agent to follow     | Nothing by itself  |
+| `draft-changelog`  | Returns instructions for drafting a changelog from merged PRs       | Nothing by itself  |
 
-`update-docs` writes to a new branch and returns a review link, so your published docs are never
-edited in place. `execute-request` sends a real request to the API in the spec.
+`execute-request` is the only tool that changes anything, and the only one your API key applies to.
+`update-docs` and `draft-changelog` are prompts rather than actions: they hand the agent a procedure,
+and the agent carries it out through `execute-request`.
+
+## Skills
+
+| Skill | What it does |
+| ----- | ------------ |
+| `mcp-server` | Keeps the agent straight on which project a call lands in: this server reads ReadMe's own docs, while `execute-request` plus your key acts on yours |
 
 ## Which ReadMe MCP server is this?
 
 ReadMe has two kinds of MCP server, and this plugin is the first one.
 
-**ReadMe's MCP server** (`https://docs.readme.com/mcp`) is what this plugin installs. You use it to
-manage the documentation in your own ReadMe project.
+**ReadMe's MCP server** (`https://docs.readme.com/mcp`) is what this plugin installs. It answers
+questions about ReadMe from ReadMe's own documentation, and lets the agent drive the ReadMe API
+against your project once you attach a key.
 
-**Your project's MCP server** (`https://your-project.readme.io/mcp`) is the one ReadMe generates
-from your API spec for _your_ users. Every project has its own URL, so it cannot be installed from
-the marketplace. To connect to one, use the instructions published on that project's hub. See
+**Your project's MCP server** (`https://your-project.readme.io/mcp`) is the one ReadMe generates for
+_your_ users to ask questions of your published hub. You do not need it to work on your own docs
+from here: with a key, `execute-request` reaches your content through `api.readme.com/v2`. Every
+project has its own URL, so it cannot be installed from the marketplace. See
 [your project's MCP server](https://docs.readme.com/main/docs/your-projects-mcp-server).
+
+Both are the same software; the hostname is what decides which project it serves.
 
 ## Support
 
