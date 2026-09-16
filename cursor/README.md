@@ -94,6 +94,7 @@ and the agent carries it out through `execute-request`.
 | Skill | What it does |
 | ----- | ------------ |
 | `mcp-server` | Keeps the agent straight on which project a call lands in: this server reads ReadMe's own docs, while `execute-request` plus your key acts on yours |
+| `mcp-auth` | Establishes which key is in play and diagnoses the failures a missing or unresolved one produces |
 
 ## Which ReadMe MCP server is this?
 

@@ -38,7 +38,7 @@ Plans: Starter (free), Pro, Enterprise. Enterprise supports child projects and D
    ```
 
    Keep the single quotes: Claude Code expands `${README_API_KEY}` when it starts, so the key never lands in a config file. In Codex: `codex mcp add readme --url https://docs.readme.com/mcp --bearer-token-env-var README_API_KEY`. Not possible in Claude Desktop Chat, Cowork or claude.ai; see the section below.
-7. Verify: `readme:execute-request` with spec title `ReadMe API`, `GET https://api.readme.com/v2/projects/me`. A 200 with the project name means the plugin is wired to the right project. A 500 titled `An unknown error has occurred.` means the key is missing or wrong; go back to step 5.
+7. Verify: `readme:execute-request` with spec title `ReadMe API`, `GET https://api.readme.com/v2/projects/me`. A 200 with the project name means the plugin is wired to the right project. `Missing Security Schemes` means the registration is sending no key; a 401 titled `The API key couldn't be located.` means the key is wrong; a 500 titled `An unknown error has occurred.` means it resolved to an empty string. In every case, go back to step 5.
 
 ## Doing it with Claude in Chrome
 
