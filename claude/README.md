@@ -60,3 +60,13 @@ Keep the single quotes so Claude Code expands the variable at startup instead of
 One key maps to one project. To switch projects, change the exported key and restart.
 
 Claude Desktop Chat, Cowork and claude.ai cannot take an API key, so the plugin stays read-only there.
+
+---
+
+## Skills
+
+| Skill | What it does |
+| ----- | ------------ |
+| `mcp-server` | Keeps the agent straight on which project and which spec a call lands in: this server reads ReadMe's own docs, while `execute-request` plus your key acts on yours |
+| `mcp-auth` | Establishes which key is in play and diagnoses the failures a missing or unresolved one produces |
+| `onboarding` | Walks a new customer from signup to a published hub and a working API key |

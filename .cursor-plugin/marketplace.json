@@ -1,0 +1,20 @@
+{
+  "name": "readme",
+  "owner": {
+    "name": "ReadMe",
+    "email": "support@readme.io"
+  },
+  "metadata": {
+    "description": "ReadMe plugins for AI coding agents"
+  },
+  "plugins": [
+    {
+      "name": "readme",
+      "source": "cursor",
+      "description": "Search, read, and update your ReadMe docs, API reference, and changelog.",
+      "minClientVersions": {
+        "cursor": "3.13.0"
+      }
+    }
+  ]
+}

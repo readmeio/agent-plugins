@@ -7,6 +7,12 @@ description: Get a new customer from zero to a live ReadMe developer hub. Use wh
 
 > Onboarding endpoints are coming soon. Until then this skill only covers the web-UI flow and ReadMe basics.
 
+## Tools
+
+- `search`
+- `fetch`
+- `execute-request`
+
 ## What ReadMe is
 
 ReadMe hosts a developer hub for your API at `{subdomain}.readme.io` or a custom domain. One hub contains:
@@ -30,32 +36,39 @@ Plans: Starter (free), Pro, Enterprise. Enterprise supports child projects and D
 3. Add the API definition under **API Reference**: upload an OpenAPI file, import a URL, build one from scratch, or run `npx rdme openapi upload <file>` from a terminal. ReadMe validates the file and renders every endpoint.
 4. Write the first guide under **Guides**. Use the AI Agent for a draft or the editor for a blank page. A "Getting Started" page is the usual first one.
 5. Generate an API key at **Configuration → API Keys**, URL `https://dash.readme.com/project/{subdomain}/v{version}/api-key`.
-6. Attach the key. The plugin's own `readme` server is anonymous and cannot read the key. The user registers a server with the same name, which replaces the plugin's one, then exports the key in the shell that starts Codex and starts a new session. In Codex:
+6. Attach the key. The plugin's own `readme` server is anonymous and cannot read the key. The user registers a server under the same name, which replaces the plugin's one. The command differs per client: use the registration table in the `mcp-auth` skill, which also covers repairing a key that is already set.
+7. Verify: `execute-request` with spec title `ReadMe API`, `GET https://api.readme.com/v2/projects/me`. A 200 with the project name means the plugin is wired to the right project. `Missing Security Schemes` means the registration is sending no key; a 401 titled `The API key couldn't be located.` means the key is wrong; a 500 titled `An unknown error has occurred.` means it resolved to an empty string. In every case, go back to step 5.
 
-   ```
-   export README_API_KEY=rdme_…
-   codex mcp add readme --url https://docs.readme.com/mcp --bearer-token-env-var README_API_KEY
-   ```
+After step 7, the `mcp-server` skill covers which spec and which project everything else lands in.
 
-   Codex reads the variable at startup, so the key never lands in a config file. The ChatGPT desktop app shares Codex's config, so this registration also covers Codex sessions there. In Claude Code the equivalent is `claude mcp add --scope user --transport http readme https://docs.readme.com/mcp --header 'Authorization: Bearer ${README_API_KEY}'`. Not possible in ChatGPT web; see the section below.
-7. Verify: `readme:execute-request` with spec title `ReadMe API`, `GET https://api.readme.com/v2/projects/me`. A 200 with the project name means the plugin is wired to the right project. A 500 titled `An unknown error has occurred.` means the key is missing or wrong; go back to step 5.
+## Driving the browser yourself
 
-## Doing it with the ChatGPT browser
+Steps 1 to 5 are all browser work. If you can drive a browser, offer to do them in the user's own browser instead of only listing the steps: open the signup page, create the project, upload the API definition, and open the API Keys page. Let the user type credentials and payment details themselves. Steps 6 and 7 stay in the terminal.
 
-Steps 1 to 5 are all browser work. In the ChatGPT desktop app or ChatGPT web, offer to drive them with `@Browser` instead of only listing the steps: open the signup page, create the project, and open the API Keys page. The built-in browser has its own profile, so the user signs in to ReadMe there and types credentials and payment details themselves; ChatGPT asks before submitting forms. It cannot upload files, so for step 3 import the OpenAPI definition by URL or run `npx rdme openapi upload <file>` from Codex. Codex CLI and the IDE extension have no browser; list the steps there. Steps 6 and 7 stay in the terminal.
+Find the row for the client you are running in. If you cannot tell which one that is, ask rather than guess.
+
+| Client | Drive the browser with |
+| --- | --- |
+| Claude Code | `mcp__claude-in-chrome__*`, when the Claude in Chrome extension is connected |
+| ChatGPT desktop app or ChatGPT web | `@Browser`. It has its own profile, so the user signs in to ReadMe there, and it asks before submitting forms. It cannot upload files, so for step 3 import the API definition by URL or run `npx rdme openapi upload <file>` from a terminal |
+| Codex CLI, Codex IDE extension, Cursor | No browser of their own. List the steps for the user |
 
 ## When you cannot install anything yourself
 
-In a ChatGPT chat, desktop or web, you have no shell and cannot add a marketplace, install a plugin or edit MCP config. Do not attempt it and do not ask the user to run commands in the chat. If the `readme:*` tools are missing, the user has to install the plugin by hand. Give them these steps exactly:
+On a chat surface you have no shell and cannot add a marketplace, install a plugin or edit MCP config. Do not attempt it and do not ask the user to run commands there. If the ReadMe tools are missing, the user has to install the plugin by hand. Find their client below and give them those steps exactly.
 
-- ChatGPT desktop app: open the **Plugins** tab and click **Add marketplace**. Enter `readmeio/agent-plugins` as the source, leave the Git ref as `main` and the sparse paths empty, then click **Add marketplace**. Install **readme** from the new marketplace and start a new chat so the tools load.
-- ChatGPT web: there is no marketplace option, only the plugin directory. Until the ReadMe plugin is listed there, the user can still add the MCP server on its own: turn on **Developer mode** under **Settings → Security and login**, open **Plugins**, click **+** next to the search box, and in the **New Plugin** form set the name to `readme`, the server URL to `https://docs.readme.com/mcp`, and authentication to **No Auth**. That gives the `readme:*` tools but not the skills, so keep this skill's content in the conversation yourself.
+| Client | Steps |
+| --- | --- |
+| Claude Desktop, Cowork, claude.ai | Click **Customize** in the left sidebar, then **Plugins** — in Cowork, open the **Cowork** tab first. Under **Personal plugins**, click **+** → **Add marketplace** and enter `readmeio/agent-plugins`. Find **readme** in the list, click **Install**, then start a new chat so the tools load. Plugins need a paid Claude plan; on Team and Enterprise an owner may have disabled personal marketplaces, in which case they add it under **Organization settings → Plugins** |
+| ChatGPT desktop app | Open the **Plugins** tab and click **Add marketplace**. Enter `readmeio/agent-plugins` as the source, leave the Git ref as `main` and the sparse paths empty, then click **Add marketplace**. Install **readme** from the new marketplace and start a new chat so the tools load |
+| ChatGPT web | There is no marketplace option, only the plugin directory. Until the ReadMe plugin is listed there, the user can still add the MCP server on its own: turn on **Developer mode** under **Settings → Security and login**, open **Plugins**, click **+** next to the search box, and in the **New Plugin** form set the name to `readme`, the server URL to `https://docs.readme.com/mcp`, and authentication to **No Auth**. That gives the tools but not the skills, so keep this skill's content in the conversation yourself |
+| Cursor | Open **Cursor Settings → Plugins**, search for **ReadMe**, click **Install** and choose project or user scope. Or run `/add-plugin readme` in chat |
 
-Once installed, the ReadMe connector in a chat is read-only: `readme:search`, `readme:fetch` and the endpoint tools work on public projects, but ChatGPT cannot take an API key, so steps 6 and 7 of the Quick Start do not apply and write tools such as `readme:update-docs` fail. Say so before the user tries. For creating or updating pages, offer to continue in Codex with the server registered as in step 6.
+On the chat surfaces above the ReadMe connector stays read-only once installed: `search`, `fetch` and the endpoint tools work on public projects, but there is no way to supply an API key, so steps 6 and 7 of the Quick Start do not apply and write tools such as `update-docs` fail. Say so before the user tries. For creating or updating pages, offer to continue in a CLI or editor with the server registered as in step 6.
 
 ## Reading the docs meanwhile
 
-Use `readme:search` for a question, then `readme:fetch` with the returned id. Useful pages:
+Use `search` for a question, then `fetch` with the returned id. Useful pages:
 
 | Id | Page |
 | --- | --- |

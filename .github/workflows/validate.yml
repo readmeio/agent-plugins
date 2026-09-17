@@ -1,0 +1,33 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Skills are identical across clients
+        run: node scripts/sync-skills.mjs --check
+
+      - name: Skill frontmatter and size
+        run: node scripts/validate-skills.mjs
+
+      - run: npm install -g @anthropic-ai/claude-code
+
+      - name: Claude plugin manifest
+        run: claude plugin validate --strict claude
+
+      - name: Claude marketplace manifest
+        run: claude plugin validate --strict .claude-plugin/marketplace.json

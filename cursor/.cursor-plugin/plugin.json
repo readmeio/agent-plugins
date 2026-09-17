@@ -30,25 +30,6 @@
     "api",
     "mcp"
   ],
-  "variables": {
-    "type": "object",
-    "properties": {
-      "README_API_KEY": {
-        "type": "string",
-        "title": "ReadMe API key",
-        "description": "API key from ReadMe Account Settings > API Keys (starts with rdme_). Grants read and write access to the projects the key belongs to."
-      }
-    },
-    "required": [
-      "README_API_KEY"
-    ]
-  },
-  "mcpServers": {
-    "readme": {
-      "url": "https://docs.readme.com/mcp",
-      "headers": {
-        "Authorization": "Bearer ${README_API_KEY}"
-      }
-    }
-  }
+  "skills": "./skills/",
+  "mcpServers": "./mcp.json"
 }

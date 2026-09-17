@@ -25,3 +25,11 @@ codex mcp add readme --url https://docs.readme.com/mcp --bearer-token-env-var RE
 ```
 
 Your `readme` entry replaces the plugin's anonymous one. The skills keep working because the server name is unchanged. Find your key under **Configuration → API Keys** in your ReadMe project dashboard.
+
+## Skills
+
+| Skill | What it does |
+| ----- | ------------ |
+| `mcp-server` | Keeps the agent straight on which project and which spec a call lands in: this server reads ReadMe's own docs, while `execute-request` plus your key acts on yours |
+| `mcp-auth` | Establishes which key is in play and diagnoses the failures a missing or unresolved one produces |
+| `onboarding` | Walks a new customer from signup to a published hub and a working API key |
