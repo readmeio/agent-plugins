@@ -1,0 +1,12 @@
+{
+  "name": "readme",
+  "interface": { "displayName": "ReadMe" },
+  "plugins": [
+    {
+      "name": "readme",
+      "source": { "source": "local", "path": "./codex" },
+      "policy": { "installation": "AVAILABLE" },
+      "category": "Productivity"
+    }
+  ]
+}
