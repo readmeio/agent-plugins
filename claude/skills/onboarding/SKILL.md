@@ -40,8 +40,6 @@ Plans: Starter (free), Pro, Enterprise. Enterprise supports child projects and D
    Keep the single quotes: Claude Code expands `${README_API_KEY}` when it starts, so the key never lands in a config file. In Codex: `codex mcp add readme --url https://docs.readme.com/mcp --bearer-token-env-var README_API_KEY`. Not possible in Claude Desktop Chat, Cowork or claude.ai; see the section below.
 7. Verify: `readme:execute-request` with spec title `ReadMe API`, `GET https://api.readme.com/v2/projects/me`. A 200 with the project name means the plugin is wired to the right project. A 500 titled `An unknown error has occurred.` means the key is missing or wrong; go back to step 5.
 
-After step 7, load the `readme-api` skill for anything else in the project.
-
 ## Doing it with Claude in Chrome
 
 Steps 1 to 5 are all browser work. If the Claude in Chrome extension is connected (`mcp__claude-in-chrome__*` tools are available), offer to drive them in the user's own browser instead of only listing the steps: open the signup page, create the project, upload the API definition, and open the API Keys page. Let the user type credentials and payment details themselves. Steps 6 and 7 stay in the terminal.
