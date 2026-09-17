@@ -40,8 +40,6 @@ Plans: Starter (free), Pro, Enterprise. Enterprise supports child projects and D
    Codex reads the variable at startup, so the key never lands in a config file. The ChatGPT desktop app shares Codex's config, so this registration also covers Codex sessions there. In Claude Code the equivalent is `claude mcp add --scope user --transport http readme https://docs.readme.com/mcp --header 'Authorization: Bearer ${README_API_KEY}'`. Not possible in ChatGPT web; see the section below.
 7. Verify: `readme:execute-request` with spec title `ReadMe API`, `GET https://api.readme.com/v2/projects/me`. A 200 with the project name means the plugin is wired to the right project. A 500 titled `An unknown error has occurred.` means the key is missing or wrong; go back to step 5.
 
-After step 7, load the `readme-api` skill for anything else in the project.
-
 ## Doing it with the ChatGPT browser
 
 Steps 1 to 5 are all browser work. In the ChatGPT desktop app or ChatGPT web, offer to drive them with `@Browser` instead of only listing the steps: open the signup page, create the project, and open the API Keys page. The built-in browser has its own profile, so the user signs in to ReadMe there and types credentials and payment details themselves; ChatGPT asks before submitting forms. It cannot upload files, so for step 3 import the OpenAPI definition by URL or run `npx rdme openapi upload <file>` from Codex. Codex CLI and the IDE extension have no browser; list the steps there. Steps 6 and 7 stay in the terminal.
