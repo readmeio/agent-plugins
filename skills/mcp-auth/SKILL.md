@@ -5,21 +5,24 @@ description: Establish or repair the ReadMe API key behind execute-request. Use 
 
 # The key behind execute-request
 
-The plugin ships anonymous. Public reads of ReadMe's documentation need no key; anything touching
-the user's own project does, and it travels on the MCP server registration rather than in the tool
-call. See the `mcp-server` skill for which calls land where.
+Public reads of ReadMe's documentation need no key; anything touching the user's own project does,
+and it travels on the MCP server registration rather than in the tool call. See the `mcp-server`
+skill for which calls land where.
+
+Cursor prompts for `README_API_KEY` on install. Claude and Codex ship anonymous, so those users
+still have to register the server themselves.
 
 ## Tools
 
 - `execute-request`
 
-## Assume anonymous
+## Assume the registration may be empty
 
-Most users have not registered a key, so do not spend a call proving it. Go straight to the work:
+Do not spend a call proving auth unless you need the user's project. Go straight to the work:
 
 - ReadMe documentation questions — `search` and `fetch`, no key involved.
 - The user's project, and they have not mentioned a key — go to **No key yet** below.
-- The user says they registered one, or an `execute-request` call fails — verify with the probe.
+- The user says they set a key, or an `execute-request` call fails — verify with the probe.
 
 ## Verify
 
@@ -53,7 +56,7 @@ register the key with the server or paste it in chat.
 
 Offer the better option first:
 
-- **Preferred:** they register the server with the key themselves, so it stays out of the chat. They
+- **Preferred:** they put the key on the server registration, so it stays out of the chat. They
   create the key under **Configuration → API Keys** in ReadMe, then follow **Registering the key**
   below.
 - **Otherwise:** they paste it and you send it as a header on each call:
@@ -97,8 +100,9 @@ thing to change.
 
 ## Registering the key
 
-Registering a `readme` server of their own replaces the plugin's anonymous one. The server name stays
-the same, so the skills and tools keep working.
+On Cursor, set the plugin variable. On Claude and Codex, registering a `readme` server of their own
+replaces the plugin's anonymous one. The server name stays the same, so the skills and tools keep
+working.
 
 Find the row for the client you are running in. If you cannot tell which one that is, ask the user —
 the wrong row sends them to a config file their client never reads.
@@ -107,5 +111,5 @@ the wrong row sends them to a config file their client never reads.
 | --- | --- |
 | Claude Code | `export README_API_KEY=rdme_…`, then `claude mcp add --scope user --transport http readme https://docs.readme.com/mcp --header 'Authorization: Bearer ${README_API_KEY}'`. Keep the single quotes: the variable is expanded when Claude Code starts, so the key never lands in a config file. Restart afterwards |
 | Codex, and the ChatGPT desktop app that shares its config | `export README_API_KEY=rdme_…`, then `codex mcp add readme --url https://docs.readme.com/mcp --bearer-token-env-var README_API_KEY`. Codex reads the variable at startup, so the key never lands in a config file. Start a new session afterwards |
-| Cursor | Add a `readme` entry to `~/.cursor/mcp.json` for every project, or `.cursor/mcp.json` for one: `"type": "http"`, `"url": "https://docs.readme.com/mcp"`, and a `headers` block setting `Authorization` to `Bearer ${env:README_API_KEY}`. Export the variable in the shell the editor launches from, then restart the editor, since the header resolves when the server connects |
+| Cursor | Open **Customize**, find **ReadMe**, and set **ReadMe API key** under **Plugins → Configure** (also the install prompt). Create the key under **Configuration → API Keys**. Restart if the server was already connected. Do not also add a `readme` entry in `~/.cursor/mcp.json`: a user-level server with the same name overrides the plugin, including a blank or `${env:README_API_KEY}` header that never resolved |
 | Claude Desktop, Cowork, claude.ai, ChatGPT web | Not possible. The connector is read-only on these surfaces and cannot take a key. Say so, and offer to carry on in a CLI or editor |

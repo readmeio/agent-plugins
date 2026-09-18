@@ -1,7 +1,7 @@
 {
   "name": "readme",
   "displayName": "ReadMe",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minClientVersions": {
     "cursor": "3.13.0"
   },
@@ -31,5 +31,18 @@
     "mcp"
   ],
   "skills": "./skills/",
+  "variables": {
+    "type": "object",
+    "properties": {
+      "README_API_KEY": {
+        "description": "API key from ReadMe Configuration → API Keys (starts with rdme_). Grants read and write access to the project the key belongs to.",
+        "title": "ReadMe API key",
+        "type": "string"
+      }
+    },
+    "required": [
+      "README_API_KEY"
+    ]
+  },
   "mcpServers": "./mcp.json"
 }

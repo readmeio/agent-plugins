@@ -72,16 +72,15 @@ ships its own directory because each marketplace submission reads only that dire
 
 ## Authentication
 
-All three plugins talk to the same endpoint, `https://docs.readme.com/mcp`, and all three ship
-anonymous. Without a key you get read-only access to public docs, which is enough for searching and
-reading, and none of the plugins prompt for anything on install.
+All three plugins talk to the same endpoint, `https://docs.readme.com/mcp`. Without a key you get
+read-only access to public docs. Writes through `execute-request` need a ReadMe API key, and each
+client wires that credential differently.
 
-Write tools such as `update-docs` need a ReadMe API key. That step is the user's, not the package's,
-because each client wires credentials differently and the Agent Plugins spec forbids putting them in
-a plugin at all: it requires headers to be literal package data with no secrets in them, and Codex
-strips `Authorization` from plugin MCP configs regardless. In every client the shape is the same,
-register the server yourself with the key and your entry replaces the plugin's anonymous one. Each
-plugin README has the exact snippet.
+Cursor declares `README_API_KEY` as a plugin variable and prompts for it on install (or under
+**Plugins → Configure**). Claude and Codex cannot put secrets in a plugin MCP config — the Agent
+Plugins spec requires headers to be literal package data, and Codex strips `Authorization` anyway
+— so those clients still ship anonymous and the user registers the server themselves. Each plugin
+README has the exact steps.
 
 ## License
 

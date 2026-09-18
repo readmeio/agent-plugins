@@ -12,12 +12,12 @@ The server is bound to one project by its hostname, and this one is ReadMe's own
 
 ## Install
 
-1. Open **Cursor Settings → Plugins**.
-2. Search for **ReadMe**.
-3. Click **Install** and choose project or user scope.
+1. Open **Customize** in Cursor's sidebar.
+2. Find **ReadMe** and select **Install**, choosing project or user scope.
+3. Set your **ReadMe API key** when prompted (see below).
 
-Or run `/add-plugin readme` in chat. Nothing to configure afterwards: the plugin reads public docs
-straight away, and a key is only needed for writes (see below).
+Or run `/add-plugin readme` in chat. Public reads of ReadMe's own docs work without a key; anything
+that touches your project needs the key from step 3.
 
 ### From this repository
 
@@ -36,6 +36,9 @@ there. Teams and Enterprise plans only.
 {
   "mcpServers": {
     "readme": {
+      "headers": {
+        "Authorization": "Bearer ${README_API_KEY}"
+      },
       "type": "http",
       "url": "https://docs.readme.com/mcp"
     }
@@ -43,33 +46,19 @@ there. Teams and Enterprise plans only.
 }
 ```
 
+`${README_API_KEY}` is a plugin variable. Cursor substitutes the value you set at install (or later
+under **Plugins → Configure**). It is not a shell environment variable.
+
 ## Authentication
 
-Public read access works without any setup, so the plugin ships no credential and asks for nothing
-on install.
+Create a key under **Configuration → API Keys** in ReadMe. Paste it into the install prompt, or
+open **Plugins → Configure** on the installed plugin and set **ReadMe API key**. Rotate it from
+Configuration if it is ever exposed.
 
-Anything that changes your project goes through `execute-request` against `api.readme.com`, and that
-needs your ReadMe API key. Register the server yourself once with the key, and your `readme` entry
-replaces the plugin's anonymous one:
-
-```json
-{
-  "mcpServers": {
-    "readme": {
-      "type": "http",
-      "url": "https://docs.readme.com/mcp",
-      "headers": {
-        "Authorization": "Bearer ${env:README_API_KEY}"
-      }
-    }
-  }
-}
-```
-
-Put that in `~/.cursor/mcp.json` for every project, or `.cursor/mcp.json` for one. Create the key
-under **Account Settings → API Keys** in ReadMe and export it as `README_API_KEY` rather than
-committing it. The key decides which project the agent reaches, and grants read and write access to
-it. Rotate it from Account Settings if it is ever exposed.
+`search` and `fetch` still answer from ReadMe's own documentation. The key is what `execute-request`
+sends to `api.readme.com`, so that tool lands in **your** project. A user-level `readme` entry in
+`~/.cursor/mcp.json` overrides the plugin's headers if both exist; prefer Configure unless you are
+deliberately replacing the server.
 
 ## What agents can do
 
