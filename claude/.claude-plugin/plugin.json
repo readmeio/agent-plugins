@@ -6,5 +6,7 @@
   "homepage": "https://docs.readme.com/main/docs/readmes-mcp-server",
   "repository": "https://github.com/readmeio/agent-plugins",
   "license": "MIT",
+  "icon": "./assets/icon.svg",
+  "privacyPolicyUrl": "https://readme.com/privacy",
   "keywords": ["readme", "documentation", "mcp", "openapi"]
 }
