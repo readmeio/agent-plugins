@@ -1,115 +1,31 @@
 ---
 name: mcp-auth
-description: Establish or repair the ReadMe API key behind execute-request. Use when a ReadMe call fails with "Missing Security Schemes", "The API key couldn't be located", or "An unknown error has occurred", when the user asks which project their key reaches, when they say they set a key but it is not working, and before the first write to their project.
+description: Recover a ReadMe MCP connection when a project operation is rejected for missing, invalid, expired, or unresolved authentication.
 ---
 
-# The key behind execute-request
+# Recover ReadMe MCP authentication
 
-Public reads of ReadMe's documentation need no key; anything touching the user's own project does,
-and it travels on the MCP server registration rather than in the tool call. See the `mcp-server`
-skill for which calls land where.
+Invoke on an authentication failure, not before routine project work.
 
-Cursor prompts for `README_API_KEY` on install. Claude and Codex ship anonymous, so those users
-still have to register the server themselves.
+## Workflow
 
-## Tools
+1. **Classify.** Capture the failing operation and non-secret error response. Check whether the response actually indicates missing/rejected credentials rather than validation, insufficient permissions, plan restrictions, or a service outage.
+   **Done:** There is an authentication failure to repair, or the error is handed back to its owning workflow.
+2. **Identify the environment.** Establish both the client and surface (for example Claude Code versus Claude Desktop Chat); ask if unclear. Read only the matching [client connection reference](CLIENTS.md).
+   **Done:** The instructions apply to the user's actual environment.
+3. **Repair.** Direct the user to the intended ReadMe project's **Configuration → API Keys** and their client's credential settings. Keep secrets out of chat, committed files, and tool arguments. The user enters or rotates the key; apply non-secret configuration only with permission. Follow the environment's reconnect instructions.
+   **Done:** The user confirms the credential is configured, or receives an explicit manual handoff.
+4. **Verify and resume.** Use a documented, non-mutating project-identity operation through the MCP connection; confirm the project matches the intended target. Retry the interrupted operation only after successful verification, checking the existing state before retrying a write with an uncertain result.
+   **Done:** The intended project is reachable and the original workflow resumes, or the unresolved error is reported without repeated guesses.
 
-- `execute-request`
+## Authentication scope
 
-## Assume the registration may be empty
+Public reads of ReadMe's own product docs can use the plugin's anonymous connection. Operations on the customer's project use the authenticated connection; a successful public-doc search does not verify it. The credential selects the project.
 
-Do not spend a call proving auth unless you need the user's project. Go straight to the work:
+Use [MCP routing](../PROJECT-WORKFLOW.md) for the project-operation contract.
 
-- ReadMe documentation questions — `search` and `fetch`, no key involved.
-- The user's project, and they have not mentioned a key — go to **No key yet** below.
-- The user says they set a key, or an `execute-request` call fails — verify with the probe.
+## Reference to fill
 
-## Verify
-
-`execute-request`, spec title `ReadMe API`, with no `Authorization` header of your own:
-
-```json
-{
-  "title": "ReadMe API",
-  "harRequest": {
-    "method": "get",
-    "url": "https://api.readme.com/v2/projects/me"
-  }
-}
-```
-
-| Response | Means | Next |
-| --- | --- | --- |
-| A project object | The registration carries a working key | Name the project and subdomain, carry on. Ask for nothing |
-| `Missing Security Schemes` | No `Authorization` header at all — the server is anonymous | **No key yet** |
-| `"title": "The API key couldn't be located."`, status 401 | A key is being sent, but it is not a real key | **A key is set but wrong** |
-| `"title": "An unknown error has occurred."`, status 500 | The bearer is empty — the variable resolved to nothing | **A key is set but wrong** |
-
-Resolve this once per session. Having seen a project object, send no `Authorization` header of your
-own for the rest of the session.
-
-## No key yet
-
-If the user has not named a project, ask, and wait. Pick no project, infer none from open files or
-earlier turns, and read no guides to narrow it down. Ask which project, and whether they would rather
-register the key with the server or paste it in chat.
-
-Offer the better option first:
-
-- **Preferred:** they put the key on the server registration, so it stays out of the chat. They
-  create the key under **Configuration → API Keys** in ReadMe, then follow **Registering the key**
-  below.
-- **Otherwise:** they paste it and you send it as a header on each call:
-
-  ```json
-  {
-    "title": "ReadMe API",
-    "harRequest": {
-      "method": "get",
-      "url": "https://api.readme.com/v2/projects/me",
-      "headers": [{ "name": "Authorization", "value": "Bearer rdme_..." }]
-    }
-  }
-  ```
-
-  This works, and it also puts the key in the transcript. Say so, and tell them to rotate it.
-
-Send a header of your own **only** when the probe returned `Missing Security Schemes`. A header on the
-server registration overrides anything you set in `harRequest`, so against a registered server a
-pasted key is silently ignored and the call lands in whichever project the registration owns — no
-error, just the wrong project.
-
-## A key is set but wrong
-
-Both failures mean an `Authorization` header is reaching the API and the API is rejecting it. The
-usual cause is the registration referring to an environment variable the client resolved to nothing,
-or passed through as literal text, because the variable is unset where the client launched from:
-
-- **Status 500, `An unknown error has occurred.`** — the header arrived empty.
-- **Status 401, `The API key couldn't be located.`** — a value arrived, but no such key exists.
-  Also what a revoked or mistyped key returns.
-
-Say that plainly before asking them to paste anything. Ask them to confirm the variable is exported
-in the environment the client launched from, then reconnect as the **Registering the key** row for
-their client describes. If the key is genuinely gone, they create a new one under **Configuration →
-API Keys**.
-
-Do not work around either failure by probing with `curl` or by retrying against the `Legacy API`
-spec. One key maps to one project; if the call reaches the wrong project, the registration is the
-thing to change.
-
-## Registering the key
-
-On Cursor, set the plugin variable. On Claude and Codex, registering a `readme` server of their own
-replaces the plugin's anonymous one. The server name stays the same, so the skills and tools keep
-working.
-
-Find the row for the client you are running in. If you cannot tell which one that is, ask the user —
-the wrong row sends them to a config file their client never reads.
-
-| Client | How |
-| --- | --- |
-| Claude Code | `export README_API_KEY=rdme_…`, then `claude mcp add --scope user --transport http readme https://docs.readme.com/mcp --header 'Authorization: Bearer ${README_API_KEY}'`. Keep the single quotes: the variable is expanded when Claude Code starts, so the key never lands in a config file. Restart afterwards |
-| Codex, and the ChatGPT desktop app that shares its config | `export README_API_KEY=rdme_…`, then `codex mcp add readme --url https://docs.readme.com/mcp --bearer-token-env-var README_API_KEY`. Codex reads the variable at startup, so the key never lands in a config file. Start a new session afterwards |
-| Cursor | Open **Customize**, find **ReadMe**, and set **ReadMe API key** under **Plugins → Configure** (also the install prompt). Create the key under **Configuration → API Keys**. Restart if the server was already connected. Do not also add a `readme` entry in `~/.cursor/mcp.json`: a user-level server with the same name overrides the plugin, including a blank or `${env:README_API_KEY}` header that never resolved |
-| Claude Desktop, Cowork, claude.ai, ChatGPT web | Not possible. The connector is read-only on these surfaces and cannot take a key. Say so, and offer to carry on in a CLI or editor |
+- **NEEDS_INPUT — Failure contract:** Confirm auth-required operations and reliable error/status mappings. The old drafts treated some generic 500 responses as empty-key failures; verify that behavior before using it diagnostically.
+- **NEEDS_INPUT — Key UI:** Verify the current key-creation/rotation labels and link to maintained ReadMe instructions.
+- **NEEDS_INPUT — Verification:** Confirm the current read-only identity operation, key/project permissions, and supported project-switching behavior.
