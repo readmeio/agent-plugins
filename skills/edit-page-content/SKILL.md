@@ -1,6 +1,6 @@
 ---
 name: edit-page-content
-description: Create or edit ReadMe page content, including guides, API reference prose, changelogs, discussions, recipes, and custom pages.
+description: Create or edit documentation pages in ReadMe, including guides, API reference prose, changelogs, discussions, recipes, and custom pages.
 ---
 
 # Edit ReadMe page content
