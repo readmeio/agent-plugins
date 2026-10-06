@@ -7,25 +7,42 @@ description: Create or edit ReadMe page content, including guides, API reference
 
 ## Workflow
 
-1. **Target.** Read [project targeting and source of truth](../PROJECT-WORKFLOW.md). Identify the page type and whether this is a new page or an edit; use [page types](PAGE-TYPES.md) for section paths and scope.
+1. **Target + Method.** Unless the user has specified directly to you, use the `managing-readme-docs` skill to understand whether you are using MCP or BiDi Sync to make changes, ensure you are working on the right project and targeting the right branch. Identify the page type and whether this is a new page or an edit; use the page-type table below for paths and scope.
    **Done:** The project, write surface, section, page identity, and applicable branch are explicit.
-2. **Locate and read.** For confirmed local work, read the mapped file's complete body/metadata, or confirm its mapped destination for a new page. For hosted work, search the customer's content through the project API, scoped to the target where supported. If search is insufficient, retrieve categories for the section, then pages within each relevant category, following pagination. Fetch the complete target page before editing.
+2. **Locate and read.** For updates, read relevant files by searching and finding.
+   For MCP use the `/v2/search` endpoint via `execute-request` and if search is insufficient, retrieve categories for the section (`v2/branches/{branch}/categories/{section}`) then pages within categories (`/v2/branches/{branch}/categories/{section}/{title}/pages`)
    **Done:** The exact page and full current body/metadata are available, or the new page's category and slug are agreed.
-3. **Draft.** Read [Creating and managing guides](https://docs.readme.com/main/docs/creating-and-managing-guides) for guide operations, [Structuring your docs](https://docs.readme.com/main/docs/structuring-your-docs.md) for organization, and [ReadMe MDX](MDX.md) when writing page bodies. Preserve unrelated content and metadata; use the page-type reference for type-specific requirements.
-   **Done:** A complete replacement body or new-page draft satisfies the requested change and applicable ReadMe rules.
-4. **Write.** For confirmed local work, edit the mapped file. For hosted work, inspect the available operation's schema. Submit the **full updated body** for body edits, not a patch/diff; send unrelated metadata only if required, retaining its current values.
-   **Done:** The intended write surface contains the requested content; failures and partial changes are explicit.
-5. **Verify.** Follow [verification](../PROJECT-WORKFLOW.md). Check every changed link, anchor, component, and requested content change, plus preservation of unrelated fields. Provide the page/review link and publication state.
-   **Done:** The saved result matches the draft, or remaining rendering/review checks are named.
+3. **Draft** Ensure that you have a strong idea of what the user wants, and what you can use in the page. Refer to the [ReadMe docs mdx page](https://docs.readme.com/main/docs/mdx.md) to understand how to write valid MDX. ReadMe offers several [built-in components](https://docs.readme.com/main/docs/built-in-components.md) that can be leveraged in every project. Apply the page-type concerns below. Existing projects may also have users who have setup [reusable content](https://docs.readme.com/main/docs/reusable-content) for their project that can also be utilized.
+4. **Write**:
+   - Use available tools to update content
+   - For MCP when creating MDX you MUST apply your changes in full
+   **Done:** changes successfully applied
+5. **Verify.** Fetch content if uring MCP, or check git status for local documentation
+   **Done:** The saved result match your applied changes.
 
-## Links and identity
+## Page Types and linking
 
-Prefer root-relative internal links such as `/docs/getting-started`, with descriptive anchor text. Use a section's correct path and append `#heading-anchor` only after checking the destination heading/anchor.
+Unless the site already uses an alternative linking style for intra-project links (same subdomain), prefer root-relative `/section/{slug}` links with descriptive text: `[Authentication](/docs/authentication)`. Use full URLs for external sites or canonical page URLs.
 
-ReadMe page slugs stay one layer deep regardless of sidebar nesting: a nested guide can still be `/docs/getting-started`, not `/docs/category/getting-started`.
+| Page type | Authoring concern | Preferred path | URI alternative |
+| --- | --- | --- | --- |
+| [Guides](https://docs.readme.com/main/docs/creating-and-managing-guides) | Narrative docs organized into categories | `/docs/{slug}` | `doc:{slug}` |
+| API reference | Prose pages or endpoint descriptions; distinguish from spec changes | `/reference/{slug}` | `ref:{slug}` |
+| Changelogs | Release notes and publication state | `/changelog/{slug}` | `changelog:{slug}` |
+| Custom pages | Standalone content that does not fit well into other sections - ie marketing content, announcement pages | `/page/{slug}` | — |
+| Recipes | Step-by-step code walkthroughs | `/recipes/{slug}` | — |
+| Discussions | Discussions and replies | `/discuss/{id}` | — |
 
-**NEEDS_INPUT — Link forms:** Document the alternative ReadMe internal-reference syntax, cross-branch/custom-domain behavior, slug collisions, and generated heading-anchor rules.
+Recipes and discussions use path links, not URI shorthand; `discuss:{id}` does not work. Discussion paths use the topic ID, e.g. `/discuss/6a869f581a29b3127d3ab2d2`.
 
-## Operation gaps
+Slugs are flat: parent/child sidebar relationships never add URL segments. Prefer the slug used in URLs returned by ReadMe when available.
 
-**NEEDS_INPUT — Page API:** Confirm search filters, category/page enumeration, complete-body fields, create/update operations, concurrency protection, and writable metadata by page type. Add canonical operation pointers rather than a copied endpoint catalog.
+Heading anchors derive from heading text using GitHub-style rules, e.g. `Creating your first guide` → `#creating-your-first-guide`. You will not be able to see anchors on pages by reading them - so apply github-style rules on any headings you see to create anchor links.
+
+For endpoint definition changes, identify the authoritative OpenAPI source and follow [OpenAPI management](https://docs.readme.com/main/docs/openapi-upload-and-management); keep these separate from prose edits.
+
+## Documentation Best Practices (helpful resources)
+
+ReadMe's docs on [creating and managing guides](https://docs.readme.com/main/docs/creating-and-managing-guides
+) contains useful information and best practices for all documentation types.
+
