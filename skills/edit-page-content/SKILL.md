@@ -17,7 +17,7 @@ description: Create or edit documentation pages in ReadMe, including guides, API
    - Use available tools to update content
    - For MCP when creating MDX you MUST apply your changes in full
    **Done:** changes successfully applied
-5. **Verify.** Fetch content if uring MCP, or check git status for local documentation
+5. **Verify.** Fetch content if using MCP, or check git status for local documentation
    **Done:** The saved result match your applied changes.
 
 ## Page Types and linking
