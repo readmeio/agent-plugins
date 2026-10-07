@@ -83,16 +83,29 @@ Changelogs appear in chronological order, and can only have their order changed 
 
 Discussions are in chronological order and cannot have their position updated.
 
-### Hiding Content
+## Hiding Content
 
 Guides, changelogs, API references and recipes can all be hidden from users by setting `hidden` on the content.
 
 Note that even with a page being hidden, users with the exact URL can still read the content provided they can access the website. Therefore, hiding content is more about hiding the content from the visible side navigation rather than entirely hiding the content.
 
-#### Hiding Categories
+### Hiding Categories
 
 To hide a category, it must be empty, or all of its immediate children must have `hidden` of true. Child pages of those pages can be public, and that will still not expose the category in the navigation.
 
-#### If a Parent Page is Hidden
+### If a Parent Page is Hidden
 
 If a page has a parent page that is hidden, regardless of whether the child page is public, it will be hidden as well.
+
+## Page Navigation Titles and Icons
+
+The text that is shown in navigation UI for all page sections are the titles of the content themselves (for discussions this is the title that the user sets when asking their question). Therefore it is recommended for all page titles are kept brief for ease of navigation.
+
+Guides and API Reference are the only sections that allow for icons to be set. These icons are any valid font-awesome icons and appear to the left of the page title in the side navigation. Recipes can have an Emoji that shows at the recipe homepage.
+
+Generally, it is recommended that:
+
+- Guides: pages at category-level use icons, but child pages do not
+- API Reference: Don't use icons for a less-busy aesthetic
+- Recipes: Use an emoji that best represents the recipe
+
