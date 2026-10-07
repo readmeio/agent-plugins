@@ -41,7 +41,16 @@ Parent pages (#empty-vs-non-empty-parent-pages) are normal pages within that cat
 
 Pages with no `parent` are at the root of the category.
 
-To order pages under a parent page/category set the `position` of the page. This is 0-based, and setting to an index that already has a page will push that page, and all pages with a greater index lower.
+To order pages under a parent page/category:
+
+- For MCP: set the `position` of the page. This is 0-based, and setting to an index that already has a page will push that page, and all pages with a greater index lower.
+- For BiDi sync: each folder in `docs/` and `reference/` contains an `order.yml` file that dictates the order. Each .mdx page in the folder must be present in the `order.yml` file without its file extension, in the order you want to show it in:
+   ```yml
+   - fileNameA
+   - fileNameC
+   - fileNameB
+   ```
+   To have the pages in that be ordered A, C, B.
 
 #### Empty vs Non-empty Parent Pages
 
