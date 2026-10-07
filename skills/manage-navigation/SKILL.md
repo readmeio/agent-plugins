@@ -112,7 +112,7 @@ If a page has a parent page that is hidden, regardless of whether the child page
 
 The text that is shown in navigation UI for all page sections are the titles of the content themselves (for discussions this is the title that the user sets when asking their question). Therefore it is recommended for all page titles are kept brief for ease of navigation.
 
-Guides and API Reference are the only sections that allow for icons to be set. These icons are any valid font-awesome icons and appear to the left of the page title in the side navigation. Recipes can have an Emoji that shows at the recipe homepage.
+Guides and API Reference are the only sections that allow for icons to be set. These icons are any valid "regular" or "duotone" font-awesome icons, or unicode emoji, and appear to the left of the page title in the side navigation. Recipes can have an Emoji that shows at the recipe homepage.
 
 Generally, it is recommended that:
 
