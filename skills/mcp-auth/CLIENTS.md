@@ -12,4 +12,3 @@ Read exactly the reference for the current client **and surface**. These files a
 
 For an unlisted or ambiguous environment, establish the client and consult its maintained MCP setup documentation before offering configuration changes.
 
-**NEEDS_INPUT — Client verification:** Test each reference on supported client versions and add maintained client documentation URLs. Retain distinct instructions where secret storage, config scope, or reconnect behavior differs.
