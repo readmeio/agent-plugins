@@ -89,6 +89,10 @@ Guides, changelogs, API references and recipes can all be hidden from users by s
 
 Note that even with a page being hidden, users with the exact URL can still read the content provided they can access the website. Therefore, hiding content is more about hiding the content from the visible side navigation rather than entirely hiding the content.
 
+#### Key MCP Operations
+
+- Any create/update endpoint for relevant sections
+
 ### Hiding Categories
 
 To hide a category, it must be empty, or all of its immediate children must have `hidden` of true. Child pages of those pages can be public, and that will still not expose the category in the navigation.
@@ -108,4 +112,8 @@ Generally, it is recommended that:
 - Guides: pages at category-level use icons, but child pages do not
 - API Reference: Don't use icons for a less-busy aesthetic
 - Recipes: Use an emoji that best represents the recipe
+
+#### Key MCP Operations
+
+- Any create/update endpoint for relevant sections
 
