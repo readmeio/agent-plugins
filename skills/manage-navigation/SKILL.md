@@ -22,8 +22,6 @@ description: Organize docs side navigation in ReadMe including category manageme
 
 ReadMe's navigation style is section-dependent. In BiDi synced repositories sections are the folders at root level - ie `docs/` and `reference/`
 
-IMPORTANT: Note that not providing information will leave that information to what currently exists in a 
-
 ### Categories
 
 Categories are not pages - but are the top-level containers that exist in the UI for certain sections. In BiDi synced repositories these correspond to the folders that exist within section folders.
