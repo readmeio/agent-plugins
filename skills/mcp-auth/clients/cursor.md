@@ -1,6 +1,6 @@
 # Cursor connection
 
-Applies to the Cursor IDE and the Cursor CLI (`agent`). A plugin installed at user scope in either one is available in the other. Install the plugin once.
+Applies to the Cursor IDE, Cursor web, and the Cursor CLI (`agent`). A plugin installed at user scope in any one is available in the others. Install the plugin once. Cursor web follows the same steps as the Cursor UI below.
 
 ## Install the ReadMe Plugin
 
