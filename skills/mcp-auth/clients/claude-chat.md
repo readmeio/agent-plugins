@@ -1,6 +1,8 @@
 # Claude Chat connection
 
-Applies to the Chat interface in the Claude Desktop App and claude.ai. For Claude Code (CLI or the desktop Code tab) refer to `./claude-code.md` instead.
+Applies to the Chat interface in the Claude Desktop App. For Claude Code (CLI or the desktop Code tab) refer to `./claude-code.md` instead.
+
+*Note: claude.ai web is not supported - it does not allow setting headers on the MCP connector, so the ReadMe API key cannot be configured. Use the Claude Desktop App or Claude Code instead.*
 
 ## Install the ReadMe Plugin
 
@@ -37,5 +39,4 @@ Ensure that the MCP server is visible and that you can run tools to verify that 
 
 ## Before merge
 
-- **NEEDS_INPUT — Surface support:** Verify the plugin and connector flow separately for Desktop Chat and claude.ai.
-- **NEEDS_INPUT — UI:** Add the install/settings link, plan/admin restrictions, and reconnect steps for each surface.
+- **NEEDS_INPUT — UI:** Add the install/settings link, plan/admin restrictions, and reconnect steps.
