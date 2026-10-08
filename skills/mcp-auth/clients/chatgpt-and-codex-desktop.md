@@ -70,7 +70,7 @@ Currently no MCP configuration is supported via ChatGPT web due to limitations f
 
 Either you, or the user must modify the local `~/.codex/config.toml`. Add the following:
 
-*NOTE: For first-time setup on ReadMe, the user may be creating a project and will not yet have their API key - in that case leave as a placeholder value and on creation the user/you can modify with the actual API key.*
+*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case leave the api key as a placeholder and when the user creates their project the user/you can modify the configuration with the actual API key.*
 
 ```toml
 [mcp_servers.readme]
