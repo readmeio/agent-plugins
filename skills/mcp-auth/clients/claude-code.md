@@ -45,7 +45,7 @@ The user can access their API key via **Settings → API Keys** in their ReadMe 
 The user should run this themselves so that the key is not written to their shell history:
 
 ```sh
-read -rs README_API_KEY && printf '{"api_key":"%s"}' "$README_API_KEY" | claude plugin configure readme@readme --values-stdin
+read -rsp "Input your ReadMe API key: " README_API_KEY && printf '{"api_key":"%s"}' "$README_API_KEY" | claude plugin configure readme@readme --values-stdin
 ```
 
 Alternatively, running `claude plugin configure readme@readme` will prompt the user for the key.
