@@ -1,10 +1,10 @@
 # ChatGPT & Codex Desktop App Connections
 
-Applies to ChatGPT web and desktop - including codex in the ChatGPT desktop application. For Codex CLI refer to `./codex-cli.md` instead.
+Applies to ChatGPT web and desktop - including codex in the ChatGPT desktop application. For Codex CLI refer to `./codex-cli.md` instead. Note that configuring here does however apply this to the Codex CLI, but the installation for Codex CLI is simpler.
 
 ## Install the ReadMe Plugin
 
-Installing the ReadMe Plugin must be performed by the user. Only follow these steps if the user does not have the ReadMe Plugin installed.
+*Note: Only do this if the user does not already have the ReadMe Plugin available*.
 
 ### ChatGPT Web
 
@@ -31,8 +31,6 @@ This:
 1. Adds a custom marketplace from the public, ReadMe git repository for all agent plugins.
 2. Selects the "readme" plugin from the marketplace
 
-The user may have to restart their application for this installation to be recognized.
-
 #### Alternative: Manual setup
 
 If the user would prefer manual setup, they can follow these steps in the UI:
@@ -49,6 +47,14 @@ If the user would prefer manual setup, they can follow these steps in the UI:
   (leave empty)
 
 2. Install the plugin - after adding the marketplace, you can add the plugin by searching "ReadMe" and adding the "ReadMe" plugin.
+
+#### Confirmation
+
+If the user does not have the MCP server connected, attempt MCP server connection before attempting confirmation.
+
+To confirm successful installation, verify that you can now see the ReadMe plugin and see its available skills.
+
+The user may have to restart their application for this installation to be recognized.
 
 ## Install the MCP Server
 
@@ -82,3 +88,6 @@ url = "https://docs.readme.com/mcp"
 http_headers = { Authorization = "Bearer YOUR_README_API_KEY" }
 ```
 
+#### Confirmation
+
+Ensure that the MCP server is visible and that you can run tools to verify that the step has been successfully completed.
