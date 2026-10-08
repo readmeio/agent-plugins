@@ -9,5 +9,13 @@
   "license": "MIT",
   "icon": "./assets/icon.svg",
   "privacyPolicyUrl": "https://readme.com/privacy",
-  "keywords": ["readme", "documentation", "mcp", "openapi"]
+  "keywords": ["readme", "documentation", "mcp", "openapi"],
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "title": "ReadMe API key",
+      "description": "API key from Settings → API Keys in your ReadMe project. Grants read and write access to the project the key belongs to.",
+      "sensitive": true
+    }
+  }
 }

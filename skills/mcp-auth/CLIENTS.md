@@ -4,12 +4,10 @@ Read exactly the reference for the current client **and surface**. These files a
 
 | Environment | Reference |
 | --- | --- |
-| Cursor | [Cursor](clients/cursor.md) |
-| Claude Code, including its desktop Code surface | [Claude Code](clients/claude-code.md) |
-| Claude Desktop Chat, Cowork, or claude.ai | [Claude apps](clients/claude-apps.md) |
-| Codex CLI or IDE extension | [Codex](clients/codex.md) |
-| ChatGPT web or desktop | [ChatGPT](clients/chatgpt.md) |
+| Cursor IDE, Cursor web, or Cursor CLI | [Cursor](clients/cursor.md) |
+| Claude Code CLI or the desktop Code tab | [Claude Code](clients/claude-code.md) |
+| Claude Desktop Chat or claude.ai | [Claude Chat](clients/claude-chat.md) |
+| ChatGPT web or desktop, Codex desktop app, or Codex CLI | [ChatGPT & Codex](clients/chatgpt-and-codex.md) |
 
 For an unlisted or ambiguous environment, establish the client and consult its maintained MCP setup documentation before offering configuration changes.
 
-**NEEDS_INPUT — Client verification:** Test each reference on supported client versions and add maintained client documentation URLs. Retain distinct instructions where secret storage, config scope, or reconnect behavior differs.
