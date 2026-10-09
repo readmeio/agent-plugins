@@ -69,4 +69,4 @@ Use the following skills to assist the user:
 - `manage-navigation`: How to manage categories, move pages between categories, reorder pages within categories
 - `mcp-auth`: How to authenticate with the MCP server and MCP Auth constraints
 - `setup-project`: First-time project setup for ReadMe projects
-- `updating-project-styling`: Understand what styling options exist and how to update these.
+- `update-project-settings`: View and update project-wide settings such as appearance, AI, MCP, SEO, and access
