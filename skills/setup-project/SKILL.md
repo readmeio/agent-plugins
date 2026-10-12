@@ -120,6 +120,8 @@ The URL comes at the end so that the user can see their project after the modifi
 
 A user can setup bi-directional sync with a local docs repository if that is their prefered method of setup. They cannot configure the git project connection via the server, however you should assist them with the correct formatting of content, folder structure, and more.
 
+If they are creating a project, create their project, setup their styling (if provided) and then ask them to navigate to the `#/settings/git-connection` from any page on their docs domain to setup their BiDi sync.
+
 Refer to the `manage-navigation` skill for how to handle BiDi sync navigation and folder structure.
 
 ### Docs Site Import
