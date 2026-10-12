@@ -45,4 +45,5 @@ For endpoint definition changes, identify the authoritative OpenAPI source and f
 
 ReadMe's docs on [creating and managing guides](https://docs.readme.com/main/docs/creating-and-managing-guides.md
 ) contains useful information and best practices for all documentation types.
+ReadMe's docs on [BiDi sync](https://docs.readme.com/main/docs/bi-directional-sync)
 
