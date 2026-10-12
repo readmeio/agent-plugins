@@ -120,6 +120,8 @@ The URL comes at the end so that the user can see their project after the modifi
 
 A user can setup bi-directional sync with a local docs repository if that is their prefered method of setup. They cannot configure the git project connection via the server, however you should assist them with the correct formatting of content, folder structure, and more.
 
+Refer to the `manage-navigation` skill for how to handle BiDi sync navigation and folder structure.
+
 ### Docs Site Import
 
 When importing from an existing documentation site - you may actually import from up to 2x individual projects in parallel. You MUST verify that these are indeed documentation site URLs - marketing site URLs and more will be rejected outright.
