@@ -56,8 +56,7 @@ Does the user have an existing color system/style guide? May include but not be 
   - BreadCrumts (use brand color if not specified)
   - Tint (accent color)
   - Ask AI (if not given don't specify)
-  Howevew - to keep it simple it is usually good to just get the primary/accent colors.
-- Whether they would prefer light mode/dark mode by default
+  However, to keep it simple it is usually good to just get the primary/accent colors.
 
 Note that its fine if the user doesn't have anything for this, since its styling that they can configure later via UI.
 
