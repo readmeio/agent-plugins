@@ -21,15 +21,12 @@ Without the AI Booster Pack, Ask AI offers limited customization. The Booster Pa
 
 ### Choose where Ask AI appears
 
-Set `ai.owlbot.placements` (full array) to any of:
+Set `ai.owlbot.placements` (full array). The schema lists the allowed values and the default. Things the schema doesn't say:
 
-- `header`: a button in the page header
-- `floating`: a floating button on every page, centered at the bottom
-- `in_search`: inside the search modal - this appears as an 'Ask about "{query}"' and with the booster alternative questions will be generated that on selection will be sent to Ask AI.
-
-The API stores placements in the order `header`, `floating`, `in_search`, whatever order you send. `in_search` only renders in the unified search modal (`appearance.navigation.search_modal: unified`).
-
-The default is `header` and `in_search`. An empty array hides every surface while leaving Ask AI enabled. On an enterprise child, placements come from the parent until the child sets its own.
+- `in_search` only renders in the unified search modal (`appearance.navigation.search_modal: unified`). It shows an 'Ask about "{query}"' option, and with the Booster Pack it also suggests related questions.
+- The API stores placements in a fixed order, whatever order you send.
+- An empty array hides every surface while leaving Ask AI enabled.
+- On an enterprise child, placements come from the parent until the child sets its own.
 
 Related settings elsewhere: the Ask AI accent color (`appearance.brand.askai`) and the unified search modal that combines search with Ask AI (`appearance.navigation.search_modal`) are in [appearance](appearance.md).
 
