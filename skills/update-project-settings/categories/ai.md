@@ -13,7 +13,7 @@ Ask AI lets readers ask questions and get answers drawn from the project's docum
 
 ### Turn Ask AI on or off
 
-Set `ai.owlbot.enabled`. 
+Set `ai.owlbot.enabled`.
 
 The `ai.owlbot.new_experience` is a legacy field - leave as `true` as the legacy experience is deprecated.
 

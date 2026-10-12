@@ -1,6 +1,6 @@
 # update-project-settings live tests
 
-Checks every operation documented in `skills/update-project-settings` against a real `PATCH /v2/projects/me`. The suite writes to live projects and restores them afterwards, so point it at dummy projects only.
+Checks the API operations documented in `skills/update-project-settings` against a real `PATCH /v2/projects/me`. The suite writes to live projects and restores them afterwards, so point it at dummy projects only.
 
 ## Setup
 

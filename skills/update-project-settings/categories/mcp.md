@@ -20,7 +20,7 @@ While the project is unpublished, the server only accepts a project API key. Tur
 
 Set `mcp.privacy.password` to the password; set it to `null` to remove it. Users then authenticate with this password (sent in the `x-readme-auth` header) or with a project API key.
 
-The password is write-only. A 200 response with `mcp.has_password: true` in the next read confirms it was saved, so no dashboard check is needed.
+The password is write-only. A 200 response with `mcp.has_password` matching the change in the next read (`true` when set, `false` when removed) confirms it, so no dashboard check is needed.
 
 ## Endpoints and tools
 
@@ -69,7 +69,7 @@ The map is replaced in full: send every scheme to keep, and a scheme left out is
 - Omit it on an existing scheme to keep the stored secret.
 - A new scheme without one is rejected.
 
-A 200 response with the scheme listed in the next read confirms the save; the secret itself cannot be read back.
+A 200 response with the scheme listed in the next read confirms the scheme was saved. The secret cannot be read back, so ask the user to confirm it by signing in to the MCP server with OAuth.
 
 ### Customize the OAuth sign-in, success, and error pages
 

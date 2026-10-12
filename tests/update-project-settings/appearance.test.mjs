@@ -182,14 +182,16 @@ for (const profile of profiles) {
       });
 
       // Restoring a font URL cannot bring back an existing custom font's filename and format.
-      function filledSlotsSkip(paths) {
+      function fontSkip(paths) {
+        const planReason = planSkip(profile, 'stylesheet');
+        if (planReason) return planReason;
         const filled = paths.filter(path => getPath(profile.project, path) !== null);
         if (filled.length === 0) return false;
         return `custom font already set at ${filled.join(', ')}`;
       }
 
       // The font endpoint writes straight to the project, so each slot is tracked before its upload.
-      test('Upload a custom font', { skip: filledSlotsSkip([HEADING_FONT, BODY_FONT]) }, async t => {
+      test('Upload a custom font', { skip: fontSkip([HEADING_FONT, BODY_FONT]) }, async t => {
         session.track([HEADING_FONT]);
         const heading = await uploadFont(t, session, 'heading');
         if (!heading) return;
@@ -203,7 +205,7 @@ for (const profile of profiles) {
         assert.deepEqual(typography.custom_body.regular, { url: body.url, ...stored });
       });
 
-      test('Remove a custom font', { skip: filledSlotsSkip([HEADING_FONT]) }, async t => {
+      test('Remove a custom font', { skip: fontSkip([HEADING_FONT]) }, async t => {
         session.track([HEADING_FONT]);
         const project = await session.current();
         if (project.appearance.typography.custom_heading.url === null) {

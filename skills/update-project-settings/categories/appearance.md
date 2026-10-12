@@ -117,7 +117,7 @@ Send the file to `POST https://api.readme.com/v2/fonts/{slot}` (multipart field 
 
 A custom font replaces the family font for its slot, so leave `heading_font`, `body_font`, or `code_font` as they are. The custom body font applies once `body_regular` is uploaded; medium and semibold are optional extra weights.
 
-Custom fonts display on Pro and above. On lower plans the upload saves, and the site keeps using the family or system font.
+Custom fonts require Pro.
 
 ### Remove a custom font
 
