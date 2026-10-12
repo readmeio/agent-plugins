@@ -27,6 +27,8 @@ Set `ai.owlbot.placements` (full array) to any of:
 - `floating`: a floating button on every page, centered at the bottom
 - `in_search`: inside the search modal - this appears as an 'Ask about "{query}"' and with the booster alternative questions will be generated that on selection will be sent to Ask AI.
 
+The API stores placements in the order `header`, `floating`, `in_search`, whatever order you send. `in_search` only renders in the unified search modal (`appearance.navigation.search_modal: unified`).
+
 The default is `header` and `in_search`. An empty array hides every surface while leaving Ask AI enabled. On an enterprise child, placements come from the parent until the child sets its own.
 
 Related settings elsewhere: the Ask AI accent color (`appearance.brand.askai`) and the unified search modal that combines search with Ask AI (`appearance.navigation.search_modal`) are in [appearance](appearance.md).
@@ -51,7 +53,7 @@ Set `ai.chat.knowledge.use_project_knowledge` to `true` to let the agent search 
 
 ### Choose the agent's built-in models
 
-`ai.chat.models` lists the built-in models with an `enabled` flag each. Read the current array, flip `enabled` on the models to change, and send the whole array back. Custom models are managed in the dashboard at `#/settings/agent`.
+`ai.chat.models` lists the built-in models with an `enabled` flag each. Read the current array, flip `enabled` on the models to change, and send the whole array back. The array is empty until models have been configured once in the dashboard; if it is empty, send the user to `#/settings/agent`. Custom models are managed in the dashboard at `#/settings/agent`.
 
 ## Slack AI Writer
 
