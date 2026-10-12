@@ -11,6 +11,16 @@ const RESTORE_TRANSFORMS = {
   glossary: terms => terms.filter(term => !term.inherited).map(({ term, definition }) => ({ term, definition })),
 };
 
+// ReadMe assigns fresh variable IDs on every write, so restore compares variables without them.
+const COMPARE_TRANSFORMS = {
+  variable_defaults: variables => variables.map(({ id, ...variable }) => variable),
+};
+
+function comparable(path, value) {
+  if (value !== null && path in COMPARE_TRANSFORMS) return COMPARE_TRANSFORMS[path](value);
+  return value;
+}
+
 export function getPath(object, path) {
   return path.split('.').reduce((value, key) => (value == null ? undefined : value[key]), object);
 }
@@ -96,7 +106,7 @@ export function createSession(profile) {
       for (const [path, value] of restoreValues) {
         if (unverified.has(path)) continue;
         const actual = readForRestore(restored, path);
-        if (!isDeepStrictEqual(actual, value)) {
+        if (!isDeepStrictEqual(comparable(path, actual), comparable(path, value))) {
           mismatches.push(`${path}: expected ${JSON.stringify(value)}, got ${JSON.stringify(actual)}`);
         }
       }
