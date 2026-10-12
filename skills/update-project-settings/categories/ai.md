@@ -43,7 +43,7 @@ The in-product AI agent is the assistant admins use inside the ReadMe web editor
 
 ### Give the agent custom knowledge
 
-Set `ai.chat.knowledge.custom_knowledge` to free text the agent should always know, such as a product terminology, target audience notes and more. It is sent in full with every agent request rather than searched, so keep it concise; writes over the length limit are rejected. Set it to `null` to clear it. Style guides exist under the "Docs Audit" feature and are better configured there.
+Set `ai.chat.knowledge.custom_knowledge` to free text the agent should always know, such as product terminology, target audience notes, and more. It is sent in full with every agent request rather than searched, so keep it concise; writes over the length limit are rejected. Set it to `null` to clear it. Style guides exist under the "Docs Audit" feature and are better configured there.
 
 On an enterprise child, the child's own knowledge wins. Without its own, the child uses the parent's when the group shares knowledge.
 
