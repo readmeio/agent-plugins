@@ -57,7 +57,7 @@ Set `ai.chat.knowledge.use_project_knowledge` to `true` to let the agent search 
 
 ## Slack AI Writer
 
-The Slack AI Writer drafts documentation changes from Slack threads, opening a ReadMe branch per thread. See [Slack AI Writer](https://docs.readme.com/main/docs/slack-ai-writer). It is in closed beta; users can request access from support@readme.io.
+The Slack AI Writer drafts documentation changes from Slack threads, opening a ReadMe branch per thread. See [Slack AI Writer](https://docs.readme.com/main/docs/slack-ai-writer). It is in open beta; users can toggle on this functionality from their settings.
 
 ### Let the Slack AI Writer merge or delete its branches
 
