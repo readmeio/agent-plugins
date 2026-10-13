@@ -12,7 +12,7 @@ description: Create or edit documentation pages in ReadMe, including guides, API
 2. **Locate and read.** For updates, read relevant files by searching and finding.
    For MCP use the `/v2/search` endpoint via `execute-request` and if search is insufficient, retrieve categories for the section (`v2/branches/{branch}/categories/{section}`) then pages within categories (`/v2/branches/{branch}/categories/{section}/{title}/pages`)
    **Done:** The exact page and full current body/metadata are available, or the new page's category and slug are agreed.
-3. **Draft** Ensure that you have a strong idea of what the user wants, and what you can use in the page. Refer to the [ReadMe docs mdx page](https://docs.readme.com/main/docs/mdx.md) to understand how to write valid MDX. Use components and reusable content where they fit (see below). Apply the page-type concerns below.
+3. **Draft** Ensure that you have a strong idea of what the user wants, and what you can use in the page. Refer to the [ReadMe docs mdx page](https://docs.readme.com/main/docs/mdx.md) to understand how to write valid MDX. Use components and reusable content where they fit (see below), following [COMPONENTS.md](COMPONENTS.md) for when to use each built-in component and how to format it. Apply the page-type concerns below.
 4. **Write**:
    - Use available tools to update content
    - For MCP when creating MDX you MUST apply your changes in full
@@ -24,7 +24,7 @@ description: Create or edit documentation pages in ReadMe, including guides, API
 
 | Type | What it is | Docs |
 | --- | --- | --- |
-| Built-in components | Available in every project: Tabs, Accordion, Cards, and Columns | [Built-in components](https://docs.readme.com/main/docs/built-in-components.md) |
+| Built-in components | Available in every project: Tabs, Accordion, Cards, and Columns, plus callouts, tabbed code blocks, images, and embeds | [Built-in components](https://docs.readme.com/main/docs/built-in-components.md); best practices in [COMPONENTS.md](COMPONENTS.md) |
 | Custom components | JSX components a project defines under **Settings → Custom Components**, or adds from the component marketplace. Used in pages by tag name, like built-ins. Pro and Enterprise plans only | [Custom components](https://docs.readme.com/main/docs/building-custom-mdx-components.md) |
 | Reusable content | Named Markdown blocks managed under **Editor → Reusable Content**. Editing a block updates every page that uses it. Pro and Enterprise plans only | [Reusable content](https://docs.readme.com/main/docs/reusable-content.md) |
 
