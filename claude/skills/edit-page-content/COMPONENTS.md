@@ -29,7 +29,24 @@ Best practices for formatting ReadMe pages with built-in components, plus the MD
 
 ## Callouts
 
-A callout is a blockquote whose first line starts with a theme emoji:
+Prefer `<Callout>` with a Font Awesome icon. It looks more polished than an emoji. Always set `theme`, because it can't be inferred from a Font Awesome icon:
+
+```mdx
+<Callout icon="fa-circle-info" theme="info">
+### Good to know
+
+Authentication uses Bearer tokens.
+</Callout>
+```
+
+| Theme | Suggested icon | Emoji | Use for |
+| --- | --- | --- | --- |
+| `info` | `fa-circle-info` | 📘 | Context, FYI |
+| `okay` | `fa-lightbulb` | 👍 | Tips, suggestions, success states |
+| `warn` | `fa-triangle-exclamation` | 🚧 | Caution, limitations |
+| `error` | `fa-circle-exclamation` | ❗️ | Danger, breaking changes, things that must not be skipped |
+
+Callouts can also be written as a blockquote whose first line starts with a theme emoji. This form only supports emoji icons:
 
 ```md
 > 📘 Good to know
@@ -37,14 +54,7 @@ A callout is a blockquote whose first line starts with a theme emoji:
 > Authentication uses Bearer tokens.
 ```
 
-| Emoji | Theme | Use for |
-| --- | --- | --- |
-| 📘 | Info | Context, FYI |
-| 👍 | Success | Tips, suggestions, success states |
-| 🚧 | Warning | Caution, limitations |
-| ❗️ | Error | Danger, breaking changes, things that must not be skipped |
-
-The editor's raw mode writes the same thing as `<Callout icon="📘" theme="info">`. Both forms are valid; follow the page's existing style.
+When the page or project already uses emoji callouts, follow that style instead of mixing the two.
 
 Callouts are the easiest component to overuse:
 
@@ -216,10 +226,10 @@ Components from other documentation websites, when reading the .md versions, do 
 
 | Source | ReadMe |
 | --- | --- |
-| `<Note>`, `<Info>`, `:::note`, `:::info` | 📘 callout |
-| `<Tip>`, `<Check>` | 👍 callout |
-| `<Warning>`, `<Caution>`, `:::warning` | 🚧 callout |
-| `:::danger` | ❗️ callout |
+| `<Note>`, `<Info>`, `:::note`, `:::info` | `info` callout |
+| `<Tip>`, `<Check>` | `okay` callout |
+| `<Warning>`, `<Caution>`, `:::warning` | `warn` callout |
+| `:::danger` | `error` callout |
 | `<CodeGroup>` | Tabbed code blocks |
 | `<Steps>` | Numbered list, or headings if steps are long |
 | `<figure><img><figcaption>` | `<Image>` with `caption` |
