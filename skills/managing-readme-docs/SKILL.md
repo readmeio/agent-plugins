@@ -1,3 +1,8 @@
+---
+name: managing-readme-docs
+description: Shared reference for working on a ReadMe project, covering MCP routing, project sections, Git-backed docs (BiDi Sync), and confirming the active project and branch. Use before reading or changing documentation hosted on ReadMe.
+---
+
 # Working on a ReadMe project
 
 Shared reference for project operations. Read the sections needed by the current workflow.
