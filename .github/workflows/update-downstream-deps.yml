@@ -14,10 +14,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # homepage has no engines/.nvmrc or packageManager field, so both versions are set here.
+          # homepage has no packageManager field, so its pnpm version is set here.
           - repo: readmeio/homepage
             name: homepage
-            node_version: '22'
             pnpm_version: '11'
 
     steps:
@@ -29,7 +28,7 @@ jobs:
           owner: readmeio
           repositories: agent-plugins, ${{ matrix.name }}
 
-      # node_version and pnpm_version need the pnpm-aware release of this action.
+      # pnpm_version needs the pnpm-aware release of this action.
       # https://github.com/readmeio/update-downstream-deps-action
       - uses: readmeio/update-downstream-deps-action@v1
         with:
@@ -37,7 +36,6 @@ jobs:
           repository: ${{ matrix.repo }}
           github_token: ${{ steps.app-token.outputs.token }}
           npm_token: ${{ secrets.GITHUB_TOKEN }}
-          node_version: ${{ matrix.node_version }}
           pnpm_version: ${{ matrix.pnpm_version }}
           git_user_name: 'Deploy AI'
           git_user_email: '1698517+ai-deploy-readme[bot]@users.noreply.github.com'
