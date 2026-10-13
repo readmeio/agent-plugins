@@ -2,6 +2,10 @@
 
 All notable changes to this plugin will be documented here.
 
+## 1.0.2 — Skill improvements
+
+- Updated all skills to provide better walkthrough and onboarding instructions for new users
+
 ## 1.0.1 — plugin-managed API key
 
 - Declare `README_API_KEY` as a plugin variable so Cursor prompts for it on install and exposes it under **Plugins → Configure**.
