@@ -129,15 +129,15 @@ Use cards for groups of 3+ links to other pages: "Next steps", "See also", "Rela
 
 ```mdx
 <Cards>
-<Card title="Authentication" href="/docs/authentication" icon="fa-key">
-Create an API key and send your first authenticated request.
-</Card>
-<Card title="Webhooks" href="/docs/webhooks" icon="fa-bell">
-Receive events when resources change.
-</Card>
-<Card title="Errors" href="/docs/errors" icon="fa-triangle-exclamation">
-Understand error codes and how to handle them.
-</Card>
+  <Card title="Authentication" href="/docs/authentication" icon="fa-key">
+  Create an API key and send your first authenticated request.
+  </Card>
+  <Card title="Webhooks" href="/docs/webhooks" icon="fa-bell">
+  Receive events when resources change.
+  </Card>
+  <Card title="Errors" href="/docs/errors" icon="fa-triangle-exclamation">
+  Understand error codes and how to handle them.
+  </Card>
 </Cards>
 ```
 
@@ -153,16 +153,16 @@ Columns suit small side-by-side comparisons, such as "Invalid" versus "Valid" ex
 
 ```mdx
 <Columns layout="auto">
-<Column>
-
-Invalid
-
-</Column>
-<Column>
-
-Valid
-
-</Column>
+  <Column>
+  
+  Invalid
+  
+  </Column>
+  <Column>
+  
+  Valid
+  
+  </Column>
 </Columns>
 ```
 
@@ -212,7 +212,7 @@ ReadMe pages are MDX, which is stricter than Markdown wherever HTML is involved.
 
 ## Converting content from other platforms
 
-Components from Mintlify, Docusaurus, GitBook, and similar tools do not exist in ReadMe. Convert them and keep the text:
+Components from other documentation websites, when reading the .md versions, do not exist in ReadMe. Convert them and keep the text:
 
 | Source | ReadMe |
 | --- | --- |
