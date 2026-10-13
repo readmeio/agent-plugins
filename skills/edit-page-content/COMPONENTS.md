@@ -4,11 +4,13 @@ Best practices for formatting ReadMe pages with built-in components, plus the MD
 
 ## Principles
 
-- Plain Markdown always renders and is the default. Use a component when it makes the page easier to scan or navigate, not for decoration.
-- A typical page benefits from a few components. Pure prose may need none. A page made mostly of nested components is harder to read and maintain.
+- A good ReadMe page uses components. Tabs, accordions, cards, and callouts usually make content easier to scan, navigate, and read than the same content written as plain Markdown.
+- Look for places they fit. When drafting or restyling, check each section against [Choosing a component](#choosing-a-component). When content matches a component's use case, use the component rather than plain Markdown.
+- Don't force them. If content doesn't match any use case, leave it as Markdown; a page of narrative prose may have none. A component that doesn't fit, such as tabs around sequential steps or a callout around ordinary prose, is worse than no component.
+- Don't nest components deeply. A page made mostly of nested components is harder to read and maintain.
 - When restyling an existing page, change formatting only. Keep wording, code, and link targets exactly as they are unless the user asked for a rewrite, and never drop content.
 - Match what the project already does. If other pages use a component a certain way (icons on cards, callout titles), follow that.
-- When two components could fit, pick the one that wraps less: Tabs, then Cards, then Accordion, then a callout, then plain Markdown.
+- When two components could fit, pick the one that wraps less: Tabs, then Cards, then Accordion, then a callout.
 
 ## Choosing a component
 
@@ -23,7 +25,7 @@ Best practices for formatting ReadMe pages with built-in components, plus the MD
 | Informative or captioned images | [Image](#images) |
 | Videos, PDFs, or other external media | [Embed](#embeds) |
 | Diagrams that can be expressed as text | [Mermaid](https://docs.readme.com/main/docs/creating-mermaid-diagrams.md) |
-| Side-by-side layout | [Columns](#columns), sparingly |
+| Small side-by-side comparisons | [Columns](#columns) |
 
 ## Callouts
 
@@ -44,7 +46,7 @@ A callout is a blockquote whose first line starts with a theme emoji:
 
 The editor's raw mode writes the same thing as `<Callout icon="📘" theme="info">`. Both forms are valid; follow the page's existing style.
 
-Be conservative:
+Callouts are the easiest component to overuse:
 
 - Only use a callout for content that is genuinely an aside. Ordinary prose that says "must", "note that", or "remember" stays a paragraph. Boxing normal text in a callout is a defect.
 - A plain blockquote with no leading emoji stays a plain blockquote.
@@ -147,7 +149,7 @@ Understand error codes and how to handle them.
 
 ## Columns
 
-Do not add columns proactively. They suit small side-by-side comparisons, such as "Invalid" versus "Valid" examples. Keep existing columns as they are.
+Columns suit small side-by-side comparisons, such as "Invalid" versus "Valid" examples. Use them only for that; longer content in narrow columns is hard to read. Keep existing columns as they are.
 
 ```mdx
 <Columns layout="auto">
