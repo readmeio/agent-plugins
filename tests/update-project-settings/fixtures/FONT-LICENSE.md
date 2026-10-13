@@ -1,0 +1,1 @@
+`test-font.woff2` is `KaTeX_Size4-Regular.woff2` from the [KaTeX](https://github.com/KaTeX/KaTeX) npm package, distributed under the MIT License, Copyright (c) 2013-2020 Khan Academy and other contributors.
