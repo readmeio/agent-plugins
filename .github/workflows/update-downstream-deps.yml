@@ -1,0 +1,43 @@
+name: Update Downstream Dependencies
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  update-dependencies:
+    name: Update @readme/agent-plugins in ${{ matrix.repo }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # homepage has no engines/.nvmrc or packageManager field, so both versions are set here.
+          - repo: readmeio/homepage
+            name: homepage
+            node_version: '22'
+            pnpm_version: '11'
+
+    steps:
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          app-id: ${{ secrets.AI_DEPLOY_APP_ID }}
+          private-key: ${{ secrets.AI_DEPLOY_PRIVATE_KEY }}
+          owner: readmeio
+          repositories: agent-plugins, ${{ matrix.name }}
+
+      # node_version and pnpm_version need the pnpm-aware release of this action.
+      # https://github.com/readmeio/update-downstream-deps-action
+      - uses: readmeio/update-downstream-deps-action@v1
+        with:
+          package_name: '@readme/agent-plugins'
+          repository: ${{ matrix.repo }}
+          github_token: ${{ steps.app-token.outputs.token }}
+          npm_token: ${{ secrets.GITHUB_TOKEN }}
+          node_version: ${{ matrix.node_version }}
+          pnpm_version: ${{ matrix.pnpm_version }}
+          git_user_name: 'Deploy AI'
+          git_user_email: '1698517+ai-deploy-readme[bot]@users.noreply.github.com'

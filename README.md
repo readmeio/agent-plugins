@@ -49,7 +49,9 @@ agent-plugins/
 │   ├── mcp.json
 │   ├── skills/                       # Generated from ../skills
 │   └── README.md
+├── prompts/                          # Generated setup prompts, published to npm
 ├── scripts/
+├── package.json                      # @readme/agent-plugins (setup prompts only)
 ├── README.md
 └── LICENSE
 ```
@@ -69,6 +71,42 @@ node scripts/sync-skills.mjs
 
 CI runs `node scripts/sync-skills.mjs --check` and fails if a client copy has drifted. Each client
 ships its own directory because each marketplace submission reads only that directory.
+
+## Setup prompts
+
+`prompts/` holds copy-paste prompts that take a user from nothing installed to the ReadMe plugin,
+skills and MCP server connected, then hand off to the `setup-project` skill. They are generated from
+`skills/mcp-auth/clients/`, so edit those and regenerate:
+
+```
+node scripts/build-prompts.mjs
+```
+
+| Key      | Clients                                    |
+| -------- | ------------------------------------------ |
+| `all`    | Every client, with a routing table         |
+| `claude` | Claude Code and Claude Chat                |
+| `codex`  | ChatGPT and Codex                          |
+| `cursor` | Cursor                                     |
+| `other`  | Any other agent (`npx skills` + `add-mcp`) |
+
+CI runs `node scripts/build-prompts.mjs --check`. A new client file fails the build until it is added
+to `PROMPTS` in the script.
+
+The prompts are published to npm as `@readme/agent-plugins`:
+
+```js
+import { setupPrompts } from '@readme/agent-plugins';
+
+setupPrompts.claude;
+```
+
+The raw Markdown is also exported at `@readme/agent-plugins/prompts/<key>.md`.
+
+A push to `main` that changes `prompts/` runs `release.yml`: it bumps the patch version from the
+latest `v*` tag, publishes with npm trusted publishing, and pushes the tag. The tag push runs
+`update-downstream-deps.yml`, which opens a bump PR in each downstream repository. The version lives
+only in the tags; `package.json` on `main` stays at `0.0.0`.
 
 ## Authentication
 

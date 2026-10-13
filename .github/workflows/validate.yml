@@ -24,6 +24,12 @@ jobs:
       - name: Skill frontmatter and size
         run: node scripts/validate-skills.mjs
 
+      - name: Setup prompts are up to date
+        run: node scripts/build-prompts.mjs --check
+
+      - name: Setup prompt tests
+        run: npm test
+
       - run: npm install -g @anthropic-ai/claude-code
 
       - name: Claude plugin manifest
