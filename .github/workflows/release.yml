@@ -55,30 +55,24 @@ jobs:
       - run: node scripts/build-prompts.mjs --check
       - run: npm test
 
-      # The version lives in the tag only; package.json on main stays at 0.0.0, so no version
-      # commit has to get past branch protection.
-      - name: Bump version from the latest tag
+      # The version lives in tags and npm only; package.json on main stays at 0.0.0, so no version
+      # commit has to get past branch protection. Bumping past npm as well as tags means a run whose
+      # tag push failed never leaves a version that a later run would reuse.
+      - name: Bump version from the latest tag or npm release
         id: version
         env:
           VERSION_TYPE: ${{ inputs.version_type || 'patch' }}
         run: |
-          LATEST=$(git tag --list 'v*.*.*' --sort=-version:refname | head -n 1)
+          LATEST_TAG=$(git tag --list 'v*.*.*' --sort=-version:refname | head -n 1)
+          LATEST_NPM=$(npm view @readme/agent-plugins version 2> /dev/null || true)
+          LATEST=$(printf '%s\n' "${LATEST_TAG#v}" "$LATEST_NPM" | sed '/^$/d' | sort -V | tail -n 1)
           if [ -n "$LATEST" ]; then
-            npm pkg set version="${LATEST#v}"
+            npm pkg set version="$LATEST"
           fi
           npm version "$VERSION_TYPE" --no-git-tag-version
           echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
-      # Lets a re-run recover when a previous run published but failed to push the tag.
-      - name: Publish unless this version is already on npm
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
-        run: |
-          if npm view "@readme/agent-plugins@$VERSION" version > /dev/null 2>&1; then
-            echo "@readme/agent-plugins@$VERSION is already published, skipping"
-          else
-            npm publish
-          fi
+      - run: npm publish
 
       - name: Push release tag after the package is published
         env:
