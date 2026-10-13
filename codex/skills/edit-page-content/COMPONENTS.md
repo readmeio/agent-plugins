@@ -210,13 +210,14 @@ Columns suit small side-by-side comparisons, such as "Invalid" versus "Valid" ex
 
 ## MDX rules
 
-ReadMe pages are MDX, which is stricter than Markdown wherever HTML is involved. See [MDX](https://docs.readme.com/main/docs/mdx.md) and [Troubleshoot MDX errors](https://docs.readme.com/main/docs/rendering-errors-invalid-mdx.md).
+ReadMe pages are MDX. See [MDX](https://docs.readme.com/main/docs/mdx.md) and [Troubleshoot MDX errors](https://docs.readme.com/main/docs/rendering-errors-invalid-mdx.md).
 
-- Close every tag, and self-close void elements: `<br />`, `<img />`, `<hr />`.
-- Use JSX attributes: `className` instead of `class`, camelCase attribute names (except `data-` and `aria-`), and style objects: `style={{ marginLeft: 'auto' }}`.
-- Comments are `{/* comment */}`. HTML comments (`<!-- -->`) render as visible text.
+- Pick one HTML convention per page and don't mix them. Projects on ReadMe's newer editor accept standard HTML (`class`, `style="..."`, `<br>`, `<!-- -->`). Older projects only accept JSX. Follow what the page or project already uses. If there's nothing to follow, use JSX, which works on both:
+  - Close every tag, and self-close void elements: `<br />`, `<img />`, `<hr />`.
+  - Use `className` instead of `class`, camelCase attribute names (except `data-` and `aria-`), and style objects: `style={{ marginLeft: 'auto' }}`.
+  - Write comments as `{/* comment */}`.
 - `{` and `}` start JavaScript expressions. Escape literal braces and stray `<` or `>` in prose (`\{`, `&lt;`), or put them in inline code.
-- Put raw HTML that isn't valid JSX inside ``<HTMLBlock>{`...`}</HTMLBlock>``. `<script>` tags are stripped.
+- On older projects, put raw HTML that isn't valid JSX inside ``<HTMLBlock>{`...`}</HTMLBlock>``. `<script>` tags are stripped.
 - Leave a blank line between a component tag and block-level Markdown inside it, and don't indent that Markdown.
 - Only use built-in components and the project's own custom components. Don't add `import` statements, and don't define reusable JSX with `export` in a page; that belongs in a [custom component](https://docs.readme.com/main/docs/building-custom-mdx-components.md).
 
