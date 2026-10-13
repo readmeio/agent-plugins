@@ -20,6 +20,21 @@ Claude and Codex take the repository itself as a marketplace from the command li
 has no CLI equivalent: teams add this repository under **Dashboard → Plugins → Team Marketplaces →
 Add Marketplace → Import from Repo**, and Cursor indexes it from the root manifest.
 
+## Other agents (no plugin)
+
+Any other agent, including local coding agents, can use the same skills and MCP server without a
+plugin. Install the skills with [`skills`](https://github.com/vercel-labs/skills) and register the
+MCP server with [`add-mcp`](https://github.com/neondatabase/add-mcp):
+
+```
+npx skills add readmeio/agent-plugins
+npx add-mcp "https://docs.readme.com/mcp?projects=developers" --name readme
+```
+
+This also works for Cursor, Claude Code, and Codex if you prefer not to use a plugin. Don't use
+both in the same agent, or you get duplicate skills and MCP servers. API key setup and scope flags
+are in [`skills/mcp-auth/clients/other-agents.md`](skills/mcp-auth/clients/other-agents.md).
+
 ## Repository structure
 
 The repository root is a marketplace for all three clients — it is not itself a plugin. Each client
