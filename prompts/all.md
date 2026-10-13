@@ -1,6 +1,6 @@
-Set the user up with the ReadMe skills and MCP server in their coding agent, then help them create their ReadMe project.
+Set me up with the ReadMe skills and MCP server in this agent, then help me create my ReadMe project.
 
-Skip any step that is already done. When a step can only be done by the user (in an app's UI, or in their own terminal so that their API key stays out of the chat), tell them exactly what to do and wait for them to confirm.
+The instructions below call me "the user". Skip any step that is already done. When a step can only be done by me (in an app's UI, or in my own terminal so that my API key stays out of the chat), tell me exactly what to do and wait for me to confirm.
 
 Work out which client and surface you are running in, then follow only the matching section below. If it is unclear, ask the user.
 
@@ -201,7 +201,13 @@ Currently no MCP configuration is supported via ChatGPT web due to limitations f
 
 #### Codex CLI & ChatGPT Desktop App
 
-*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case leave the api key as a placeholder and when the user creates their project the user/you can modify the configuration with the actual API key.*
+*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case register the server without authentication, and once the user has created their project re-run the steps below with their actual API key (run `codex mcp remove readme` first if Codex reports that the server already exists). Do not use `--bearer-token-env-var` with an unset variable - Codex fails to start the MCP server.*
+
+```sh
+codex mcp add readme --url https://docs.readme.com/mcp
+```
+
+With an API key:
 
 ```sh
 codex mcp add readme \
@@ -297,6 +303,6 @@ For an agent that neither CLI supports, consult the agent's own skills and MCP s
 
 ## After setup
 
-Once the ReadMe skills are available and you can list tools from the ReadMe MCP server, use the `setup-project` skill to set the user up with their new ReadMe account and project.
+Once the ReadMe skills are available and you can list tools from the ReadMe MCP server, use the `setup-project` skill to set me up with my new ReadMe account and project.
 
-If the skills or MCP tools are not available yet because the client needs a restart or reload, tell the user exactly what to restart. Once they have, they should resume this conversation or paste this prompt again - the steps that are already done will be skipped.
+If the skills or MCP tools are not available yet because the client needs a restart or reload, tell me exactly what to restart. Once I have, I will resume this conversation or paste this prompt again - skip the steps that are already done.

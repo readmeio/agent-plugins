@@ -69,7 +69,16 @@ jobs:
           npm version "$VERSION_TYPE" --no-git-tag-version
           echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
-      - run: npm publish
+      # Lets a re-run recover when a previous run published but failed to push the tag.
+      - name: Publish unless this version is already on npm
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if npm view "@readme/agent-plugins@$VERSION" version > /dev/null 2>&1; then
+            echo "@readme/agent-plugins@$VERSION is already published, skipping"
+          else
+            npm publish
+          fi
 
       - name: Push release tag after the package is published
         env:

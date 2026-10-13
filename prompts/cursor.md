@@ -1,6 +1,6 @@
-Set the user up with the ReadMe skills and MCP server in their coding agent, then help them create their ReadMe project.
+Set me up with the ReadMe skills and MCP server in this agent, then help me create my ReadMe project.
 
-Skip any step that is already done. When a step can only be done by the user (in an app's UI, or in their own terminal so that their API key stays out of the chat), tell them exactly what to do and wait for them to confirm.
+The instructions below call me "the user". Skip any step that is already done. When a step can only be done by me (in an app's UI, or in my own terminal so that my API key stays out of the chat), tell me exactly what to do and wait for me to confirm.
 
 ## Cursor connection
 
@@ -40,6 +40,6 @@ Confirm that the ReadMe plugin is installed, that its skills are available, and 
 
 ## After setup
 
-Once the ReadMe skills are available and you can list tools from the ReadMe MCP server, use the `setup-project` skill to set the user up with their new ReadMe account and project.
+Once the ReadMe skills are available and you can list tools from the ReadMe MCP server, use the `setup-project` skill to set me up with my new ReadMe account and project.
 
-If the skills or MCP tools are not available yet because the client needs a restart or reload, tell the user exactly what to restart. Once they have, they should resume this conversation or paste this prompt again - the steps that are already done will be skipped.
+If the skills or MCP tools are not available yet because the client needs a restart or reload, tell me exactly what to restart. Once I have, I will resume this conversation or paste this prompt again - skip the steps that are already done.

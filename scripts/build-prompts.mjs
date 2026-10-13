@@ -16,39 +16,48 @@ export const PROMPTS = {
   other: ['other-agents.md'],
 };
 
-const INTRO = `Set the user up with the ReadMe skills and MCP server in their coding agent, then help them create their ReadMe project.
+const INTRO = `Set me up with the ReadMe skills and MCP server in this agent, then help me create my ReadMe project.
 
-Skip any step that is already done. When a step can only be done by the user (in an app's UI, or in their own terminal so that their API key stays out of the chat), tell them exactly what to do and wait for them to confirm.`;
+The instructions below call me "the user". Skip any step that is already done. When a step can only be done by me (in an app's UI, or in my own terminal so that my API key stays out of the chat), tell me exactly what to do and wait for me to confirm.`;
 
 const OUTRO = `## After setup
 
-Once the ReadMe skills are available and you can list tools from the ReadMe MCP server, use the \`setup-project\` skill to set the user up with their new ReadMe account and project.
+Once the ReadMe skills are available and you can list tools from the ReadMe MCP server, use the \`setup-project\` skill to set me up with my new ReadMe account and project.
 
-If the skills or MCP tools are not available yet because the client needs a restart or reload, tell the user exactly what to restart. Once they have, they should resume this conversation or paste this prompt again - the steps that are already done will be skipped.`;
+If the skills or MCP tools are not available yet because the client needs a restart or reload, tell me exactly what to restart. Once I have, I will resume this conversation or paste this prompt again - skip the steps that are already done.`;
 
 // Matches `./file.md`, `clients/file.md` and [text](./file.md) references to other client files.
 const FILE_REFERENCE = /\[([^\]]+)\]\((?:\.\/)?(?:clients\/)?([\w-]+\.md)\)|`(?:\.\/)?(?:clients\/)?([\w-]+\.md)`/g;
 const LEFTOVER_REFERENCE = /(?:\.\/|clients\/)[\w-]+\.md|\]\([^)]*\.md\)/;
 
-function mapOutsideFences(markdown, transform) {
-  let inFence = false;
-  return markdown
-    .split('\n')
-    .map(line => {
-      if (/^\s*(```|~~~)/.test(line)) {
-        inFence = !inFence;
-        return line;
-      }
-      return inFence ? line : transform(line);
-    })
-    .join('\n');
+// A fence closes on the same character, at least as long as the opener, with nothing after it.
+function fencedLines(lines) {
+  let opener = null;
+  return lines.map(line => {
+    const fence = line.match(/^\s{0,3}(`{3,}|~{3,})(.*)$/);
+    if (opener === null) {
+      if (fence) opener = fence[1];
+      return fence !== null;
+    }
+    if (fence && fence[1][0] === opener[0] && fence[1].length >= opener.length && fence[2].trim() === '') {
+      opener = null;
+    }
+    return true;
+  });
 }
 
-function stripSection(markdown, heading) {
+export function mapOutsideFences(markdown, transform) {
   const lines = markdown.split('\n');
-  const start = lines.findIndex(line => line.trim() === `## ${heading}`);
+  const fenced = fencedLines(lines);
+  return lines.map((line, index) => (fenced[index] ? line : transform(line))).join('\n');
+}
+
+export function stripSection(markdown, heading) {
+  const lines = markdown.split('\n');
+  const fenced = fencedLines(lines);
+  const start = lines.findIndex((line, index) => !fenced[index] && line.trim() === `## ${heading}`);
   if (start === -1) return markdown;
-  let end = lines.findIndex((line, index) => index > start && /^#{1,2} /.test(line));
+  let end = lines.findIndex((line, index) => index > start && !fenced[index] && /^#{1,2} /.test(line));
   if (end === -1) end = lines.length;
   lines.splice(start, end - start);
   return lines.join('\n');

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { PROMPTS, buildPrompts } from '../scripts/build-prompts.mjs';
+import { PROMPTS, buildPrompts, mapOutsideFences, stripSection } from '../scripts/build-prompts.mjs';
 
 const prompts = await buildPrompts();
 
@@ -36,4 +36,15 @@ test('single-client prompts skip the routing table', () => {
 test('all lists every client section', () => {
   const sections = prompts.all.match(/^## .+$/gm);
   assert.equal(sections.length, PROMPTS.all.length + 1);
+});
+
+test('leaves longer fences with nested fences untouched', () => {
+  const markdown = ['# Title', '````md', '```sh', '# not a heading', '```', '## still code', '````', '## Heading'].join('\n');
+  const demoted = mapOutsideFences(markdown, line => (line.startsWith('#') ? `#${line}` : line));
+  assert.deepEqual(demoted.split('\n'), ['## Title', '````md', '```sh', '# not a heading', '```', '## still code', '````', '### Heading']);
+});
+
+test('only strips real sections, not fenced examples', () => {
+  const markdown = ['# Title', '```md', '## Before merge', '```', 'kept', '## Before merge', 'dropped', '## Next', 'kept'].join('\n');
+  assert.equal(stripSection(markdown, 'Before merge'), ['# Title', '```md', '## Before merge', '```', 'kept', '## Next', 'kept'].join('\n'));
 });
