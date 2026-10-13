@@ -105,6 +105,8 @@ Execute on the content plan that you have agreed on with the user. Ensure that y
 
 #### If Creating a new Project + Account
 
+To create a new user account + project you must execute a POST `/v2/projects/ai_onboarding` via the `execute-request` tool from the ReadMe MCP. Only do this if the user is creating a new account, if they have an existing account they must create their project via the UI and provide the API Key.
+
 If you create a new project + account for the user, you will need to follow the steps in the `mcp-auth` skill after receiving the API Key from the endpoint upon creating the account.
 
 You should provide the user the single-sign in URL AFTER you have executed on the content plan. Make sure to keep that single sign in URL in context during any compaction that you might do, and if this has been invoked by a sub-agent that it is passed back up to its orchestrator agent.
