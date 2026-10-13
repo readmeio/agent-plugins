@@ -8,6 +8,7 @@ Read exactly the reference for the current client **and surface**. These files a
 | Claude Code CLI or the desktop Code tab | [Claude Code](clients/claude-code.md) |
 | Claude Desktop Chat or claude.ai | [Claude Chat](clients/claude-chat.md) |
 | ChatGPT web or desktop, Codex desktop app, or Codex CLI | [ChatGPT & Codex](clients/chatgpt-and-codex.md) |
+| Any other agent, including local coding agents, or a user who does not want a plugin | [Other agents](clients/other-agents.md) |
 
-For an unlisted or ambiguous environment, establish the client and consult its maintained MCP setup documentation before offering configuration changes.
+For an ambiguous environment, establish the client before offering configuration changes.
 
