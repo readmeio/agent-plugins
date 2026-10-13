@@ -29,9 +29,10 @@ description: Create or edit documentation pages in ReadMe, including guides, API
 | Reusable content | Named Markdown blocks managed under **Editor → Reusable Content**. Editing a block updates every page that uses it. Pro and Enterprise plans only | [Reusable content](https://docs.readme.com/main/docs/reusable-content.md) |
 
 - Prefer an existing component or reusable block over raw HTML or content copied between pages.
+- There is no way for you as an agent to make custom components/reusable components yet - the user must make them on their ReadMe docs site.
 - Never invent custom component or reusable block names. Only use ones already present in the project's pages, or ones the user names. If unsure, ask.
-- Editing a page that contains a reusable block does not change the block. Changes to the block itself happen in the Reusable Content editor and affect every page using it, so confirm with the user first.
-- If the user wants a new custom component or reusable block, point them to the docs above.
+- Editing a page that contains a reusable block does not change the block. Changes to the block itself happen in the Reusable Content editor in the user's docs site.
+- If the user wants a new custom component or reusable block, give them instructions for how to do this and direct them to their ReadMe docs site.
 
 ## Page Types and linking
 
