@@ -108,6 +108,10 @@ latest `v*` tag, publishes with npm trusted publishing, and pushes the tag. The 
 `update-downstream-deps.yml`, which opens a bump PR in each downstream repository. The version lives
 only in the tags; `package.json` on `main` stays at `0.0.0`.
 
+The tag push also runs `sync-docs-developers.yml`, which mirrors `skills/` into
+[`readmeio/docs-developers`](https://github.com/readmeio/docs-developers) and opens (or updates) a PR
+into `v3.0` only when the contents differ. It can also be run by hand from the Actions tab.
+
 ## Authentication
 
 All three plugins talk to the same endpoint, `https://docs.readme.com/mcp`. Without a key you get
