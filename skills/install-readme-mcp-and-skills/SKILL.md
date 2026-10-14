@@ -1,6 +1,6 @@
 ---
 name: install-readme-mcp-and-skills
-description: Install the ReadMe skills and MCP server in the current agent. Use only when the user explicitly asks to set up ReadMe in their agent.
+description: Install the ReadMe skills and MCP server in the current agent. Use only when the user does not have these configured already.
 disable-model-invocation: true
 ---
 
