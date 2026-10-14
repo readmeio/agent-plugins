@@ -110,7 +110,7 @@ Execute on the content plan that you have agreed on with the user. Ensure that y
 
 #### If Creating a new Project + Account
 
-Only create an account if the user is creating a new account. If they have an existing account they must create their project via the UI and provide the API Key.
+Only create an account if the user has confirmed they want to create a new account/they don't have a ReadMe account. If they have an existing account they must create their project via the UI and provide the API Key.
 
 Follow these steps in order, before doing any of the content plan:
 
