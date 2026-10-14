@@ -112,12 +112,12 @@ setupPrompts.claude;
 
 The raw Markdown is also exported at `@readme/agent-plugins/prompts/<key>.md`.
 
-A push to `main` that changes `prompts/` runs `release.yml`: it bumps the patch version from the
+A push to `main` that changes `prompts/` or `skills/` runs `release.yml`: it bumps the patch version from the
 latest `v*` tag, publishes with npm trusted publishing, and pushes the tag. The tag push runs
 `update-downstream-deps.yml`, which opens a bump PR in each downstream repository. The version lives
 only in the tags; `package.json` on `main` stays at `0.0.0`.
 
-A push to `main` that changes `skills/` runs `sync-docs-developers.yml`, which mirrors `skills/` into
+The tag push also runs `sync-docs-developers.yml`, which mirrors `skills/` into
 [`readmeio/docs-developers`](https://github.com/readmeio/docs-developers) and opens (or updates) a PR
 into `v3.0` only when the contents differ. It can also be run by hand from the Actions tab.
 
