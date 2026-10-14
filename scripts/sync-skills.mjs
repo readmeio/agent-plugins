@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 import { readdir, readFile, mkdir, copyFile, rm } from 'node:fs/promises';
-import { dirname, join, relative, resolve } from 'node:path';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const source = join(repoRoot, 'skills');
 const hosts = ['claude', 'codex', 'cursor'];
+// Installs the plugins themselves, so it is hosted on the docs site rather than shipped in them.
+const notInPlugins = ['install-readme-mcp-and-skills'];
 
 async function listFiles(root) {
   const found = [];
@@ -32,7 +34,7 @@ async function sameContent(a, b) {
   return left.equals(right);
 }
 
-const sourceFiles = await listFiles(source);
+const sourceFiles = (await listFiles(source)).filter((file) => !notInPlugins.includes(file.split(sep)[0]));
 if (sourceFiles.length === 0) {
   console.error(`No skills found in ${relative(repoRoot, source)}`);
   process.exit(1);

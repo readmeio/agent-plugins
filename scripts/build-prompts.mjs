@@ -8,6 +8,9 @@ const authDir = join(repoRoot, 'skills', 'mcp-auth');
 const promptsDir = join(repoRoot, 'prompts');
 const distDir = join(repoRoot, 'dist');
 
+export const INSTALL_SKILL_NAME = 'install-readme-mcp-and-skills';
+const installSkillPath = join(repoRoot, 'skills', INSTALL_SKILL_NAME, 'SKILL.md');
+
 export const PROMPTS = {
   all: ['cursor.md', 'claude-code.md', 'claude-chat.md', 'chatgpt-and-codex.md', 'other-agents.md'],
   claude: ['claude-code.md', 'claude-chat.md'],
@@ -25,6 +28,26 @@ const OUTRO = `## After setup
 Once the ReadMe skills are available and you can list tools from the ReadMe MCP server, use the \`setup-project\` skill to set me up with my new ReadMe account and project.
 
 If the skills or MCP tools are not available yet because the client needs a restart or reload, tell me exactly what to restart. Once I have, I will resume this conversation or paste this prompt again - skip the steps that are already done.`;
+
+const SKILL_FRONTMATTER = `---
+name: ${INSTALL_SKILL_NAME}
+description: Install the ReadMe skills and MCP server in the current agent. Use only when the user explicitly asks to set up ReadMe in their agent.
+disable-model-invocation: true
+---`;
+
+const SKILL_INTRO = `# Install the ReadMe MCP server and skills
+
+Set the user up with the ReadMe skills and MCP server in this agent.
+
+Skip any step that is already done. When a step can only be done by the user (in an app's UI, or in their own terminal so that their API key stays out of the chat), tell them exactly what to do and wait for them to confirm.`;
+
+const SKILL_OUTRO = `## After setup
+
+Confirm with the user that the ReadMe skills are available and that you can list tools from the ReadMe MCP server.
+
+If the skills or MCP tools are not available yet because the client needs a restart or reload, tell the user exactly what to restart. Once they have, skip the steps that are already done.
+
+If the user is creating a new ReadMe account and project, use the \`setup-project\` skill next.`;
 
 // Matches `./file.md`, `clients/file.md` and [text](./file.md) references to other client files.
 const FILE_REFERENCE = /\[([^\]]+)\]\((?:\.\/)?(?:clients\/)?([\w-]+\.md)\)|`(?:\.\/)?(?:clients\/)?([\w-]+\.md)`/g;
@@ -122,9 +145,9 @@ export async function buildPrompts() {
   if (missing.length > 0) throw new Error(`PROMPTS references missing clients/${missing.join(', clients/')}`);
 
   const clientsIndex = await readFile(join(authDir, 'CLIENTS.md'), 'utf8');
-  const prompts = {};
-  for (const [key, files] of Object.entries(PROMPTS)) {
-    const parts = [INTRO];
+
+  function assemble(files, intro, outro) {
+    const parts = [intro];
     if (files.length > 1) {
       parts.push(
         `Work out which client and surface you are running in, then follow only the matching section below. If it is unclear, ask the user.\n\n${routingTable(clientsIndex, titles, files)}`,
@@ -134,10 +157,16 @@ export async function buildPrompts() {
       const body = rewriteReferences(sources[file], titles, files, `clients/${file}`);
       parts.push(mapOutsideFences(body.trim(), line => (/^#{1,5} /.test(line) ? `#${line}` : line)));
     }
-    parts.push(OUTRO);
-    prompts[key] = `${parts.join('\n\n')}\n`;
+    parts.push(outro);
+    return `${parts.join('\n\n')}\n`;
   }
-  return prompts;
+
+  const prompts = {};
+  for (const [key, files] of Object.entries(PROMPTS)) {
+    prompts[key] = assemble(files, INTRO, OUTRO);
+  }
+  const installSkill = `${SKILL_FRONTMATTER}\n\n${assemble(PROMPTS.all, SKILL_INTRO, SKILL_OUTRO)}`;
+  return { prompts, installSkill };
 }
 
 function moduleSource(prompts) {
@@ -151,10 +180,14 @@ function typesSource(prompts) {
 }
 
 async function main() {
-  const prompts = await buildPrompts();
+  const { prompts, installSkill } = await buildPrompts();
 
   if (process.argv.includes('--check')) {
     const problems = [];
+    const currentSkill = await readFile(installSkillPath, 'utf8').catch(() => null);
+    const skillLabel = relative(repoRoot, installSkillPath);
+    if (currentSkill === null) problems.push(`missing: ${skillLabel}`);
+    else if (currentSkill !== installSkill) problems.push(`differs: ${skillLabel}`);
     const committed = (await readdir(promptsDir).catch(() => [])).filter(file => file.endsWith('.md'));
     for (const [key, text] of Object.entries(prompts)) {
       const current = await readFile(join(promptsDir, `${key}.md`), 'utf8').catch(() => null);
@@ -165,15 +198,17 @@ async function main() {
       if (!(basename(file, '.md') in prompts)) problems.push(`extra: prompts/${file}`);
     }
     if (problems.length > 0) {
-      console.error('Generated prompts are out of date:');
+      console.error('Generated prompts or install skill are out of date:');
       for (const problem of problems) console.error(`  ${problem}`);
       console.error('\nRun `node scripts/build-prompts.mjs` and commit the result.');
       process.exit(1);
     }
-    console.log('Prompts are up to date');
+    console.log('Prompts and install skill are up to date');
     return;
   }
 
+  await mkdir(dirname(installSkillPath), { recursive: true });
+  await writeFile(installSkillPath, installSkill);
   await mkdir(promptsDir, { recursive: true });
   await mkdir(distDir, { recursive: true });
   for (const [key, text] of Object.entries(prompts)) {
@@ -181,7 +216,7 @@ async function main() {
   }
   await writeFile(join(distDir, 'index.js'), moduleSource(prompts));
   await writeFile(join(distDir, 'index.d.ts'), typesSource(prompts));
-  console.log(`Wrote ${Object.keys(prompts).length} prompt(s) to ${relative(repoRoot, promptsDir)}/ and ${relative(repoRoot, distDir)}/`);
+  console.log(`Wrote ${Object.keys(prompts).length} prompt(s) to ${relative(repoRoot, promptsDir)}/ and ${relative(repoRoot, distDir)}/, and ${relative(repoRoot, installSkillPath)}`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
