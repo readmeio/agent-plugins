@@ -16,6 +16,10 @@ description: Configure authentication with ReadMe to manage documentation hosted
 4. **Verify and resume.** Use the `https://api.readme.com/v2/projects/me` endpoint via the MCP's `execute-request` to determine whether the correct project has been authenticated. After this, resume with the original operations that the user was attempting to do.
    **Done:** The intended project is reachable and the original workflow resumes, or the unresolved error is reported without repeated guesses.
 
+## First time account setup
+
+To create a new user account + project you must execute a POST `/v2/projects/ai_onboarding` via the `execute-request` tool from the ReadMe MCP. Only do this if the user is creating a new account, if they have an existing account they must create their project via the UI and provide the API Key.
+
 ## Authentication scope
 
 ReadMe API keys are scoped to a single project only. To edit multiple projects, it is recommended that you set up multiple MCP clients under different names - ie "docs-projectNameA", "docs-projectNameB" and set these up with their individual, project-based API keys.
