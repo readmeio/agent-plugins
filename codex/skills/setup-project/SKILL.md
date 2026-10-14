@@ -74,7 +74,12 @@ IF the user is creating a new account + project, then you also need:
 - The user's email
 - The project's name
 
-Instruct the user its VERY important that they have access to this email, because that email will be the owner of the project and will need to have its email verified in order to publish the project.
+Instruct the user its VERY important that they have access to this email:
+
+- This email owns the project and is the one used for account recovery. If they lose access to it, they may lose access to the project and all progress on it.
+- They will need to verify this email before they can publish the project. This does not block setup, so they can do it later.
+
+Use the email exactly as the user gives it. Never change, correct, or invent an email on their behalf - for example adding a `+` alias or fixing what looks like a typo. If you think there is a typo, ask the user to confirm the email instead.
 
 **Done**
 You have gathered all required information
@@ -105,15 +110,21 @@ Execute on the content plan that you have agreed on with the user. Ensure that y
 
 #### If Creating a new Project + Account
 
-To create a new user account + project you must execute a POST `/v2/projects/ai_onboarding` via the `execute-request` tool from the ReadMe MCP. Only do this if the user is creating a new account, if they have an existing account they must create their project via the UI and provide the API Key.
+Only create an account if the user is creating a new account. If they have an existing account they must create their project via the UI and provide the API Key.
 
-If you create a new project + account for the user, you will need to follow the steps in the `mcp-auth` skill after receiving the API Key from the endpoint upon creating the account.
+Follow these steps in order, before doing any of the content plan:
 
-You should provide the user the single-sign in URL AFTER you have executed on the content plan. Make sure to keep that single sign in URL in context during any compaction that you might do, and if this has been invoked by a sub-agent that it is passed back up to its orchestrator agent.
-
-If part of the content plan is an import from an existing website - you do not have to wait until the import is completed in its entirety, and can give the user the URL after the import has started.
-
-The URL comes at the end so that the user can see their project after the modifications have been made, and don't start with an empty project.
+1. **Create the account.** Execute a POST `/v2/projects/ai_onboarding` via the `execute-request` tool from the ReadMe MCP.
+   - If the request rejects the email, do NOT retry with an email you have changed or made up. Stop and ask the user, and only retry with the exact email they give you. ReadMe returns the same error for both causes, so tell the user both possibilities:
+     - An account already exists for this email. They must sign in via the ReadMe UI to create their new project, then follow the `mcp-auth` skill to give you its API key.
+     - The email is invalid. They must give you a different email that they have access to.
+2. **Give the user their sign-in URL straight away.** Ask them to sign in with it and tell you once they have. Tell them:
+   - The URL can only be used once, and expires after 1 week.
+   - The project is empty for now, and they will see content appear as you work on it.
+   - They will eventually need to verify their email before publishing the project, but this does not block anything now.
+3. **Wait** until the user confirms they have signed in successfully.
+4. **Connect the MCP to the new project.** Follow the steps in the `mcp-auth` skill using the API key returned when the account was created.
+5. **Execute the content plan.**
 
 ## Intake branches
 

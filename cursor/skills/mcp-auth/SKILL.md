@@ -18,7 +18,7 @@ description: Configure authentication with ReadMe to manage documentation hosted
 
 ## First time account setup
 
-To create a new user account + project you must execute a POST `/v2/projects/ai_onboarding` via the `execute-request` tool from the ReadMe MCP. Only do this if the user is creating a new account, if they have an existing account they must create their project via the UI and provide the API Key.
+New accounts and projects are created through the `setup-project` skill - follow it rather than creating an account from here. If the user has an existing account, they must create their project via the UI and provide the API Key.
 
 ## Authentication scope
 
