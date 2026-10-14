@@ -31,7 +31,7 @@ If the skills or MCP tools are not available yet because the client needs a rest
 
 const SKILL_FRONTMATTER = `---
 name: ${INSTALL_SKILL_NAME}
-description: Install the ReadMe skills and MCP server in the current agent. Use only when the user explicitly asks to set up ReadMe in their agent.
+description: Install the ReadMe skills and MCP server in the current agent. Use only when the user does not have these configured already.
 disable-model-invocation: true
 ---`;
 
