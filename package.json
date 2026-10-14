@@ -1,0 +1,34 @@
+{
+  "name": "@readme/agent-plugins",
+  "version": "0.0.0",
+  "description": "Prompts that set up the ReadMe plugin, skills and MCP server in an AI agent",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/readmeio/agent-plugins.git"
+  },
+  "type": "module",
+  "files": [
+    "dist/",
+    "prompts/"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./prompts/*.md": "./prompts/*.md",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "node scripts/build-prompts.mjs",
+    "prepack": "node scripts/build-prompts.mjs",
+    "test": "node --test tests/build-prompts.test.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
