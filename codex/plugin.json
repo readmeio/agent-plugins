@@ -1,6 +1,6 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-  "name": "readme",
+  "name": "app-6aa86f7661308191b3aa762342e6197e",
   "version": "1.1.0",
   "description": "ReadMe MCP server packaged as a plugin. Search, read, and update your ReadMe docs and API reference from your editor.",
   "author": { "name": "ReadMe", "url": "https://readme.com" },
@@ -12,7 +12,7 @@
     "com.openai": {
       "interface": {
         "displayName": "ReadMe",
-        "shortDescription": "Search, read, and update your ReadMe docs and API reference.",
+        "shortDescription": "Manage your ReadMe docs.",
         "longDescription": "Connects ChatGPT and Codex to the ReadMe MCP server so the model can list API specs, inspect endpoints, search documentation, and follow ReadMe's documentation workflows.",
         "developerName": "ReadMe",
         "category": "Productivity",
@@ -20,6 +20,7 @@
         "composerIcon": "./assets/icon.svg",
         "capabilities": ["Read", "Write"],
         "websiteURL": "https://readme.com",
+        "supportURL": "https://docs.readme.com/main/docs/need-more-support",
         "privacyPolicyURL": "https://readme.com/privacy",
         "termsOfServiceURL": "https://readme.com/tos",
         "defaultPrompt": [
