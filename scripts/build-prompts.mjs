@@ -21,7 +21,11 @@ export const PROMPTS = {
 
 const INTRO = `Set me up with the ReadMe skills and MCP server in this agent, then help me create my ReadMe project.
 
-The instructions below call me "the user". Skip any step that is already done. When a step can only be done by me (in an app's UI, or in my own terminal so that my API key stays out of the chat), tell me exactly what to do and wait for me to confirm.`;
+The instructions below call me "the user". Skip any step that is already done. When a step can only be done by me (in an app's UI, or in my own terminal so that my API key stays out of the chat), tell me exactly what to do and wait for me to confirm.
+
+## Cloud Agent
+
+If you are running in a cloud or remote sandbox (e.g. Claude Code on the web, Codex cloud, Cursor background agents), do not install plugins or write MCP config inside the sandbox. It is temporary and is not the user's app config. Direct the user to configure the plugin/connector and API key through the app's own settings, then follow the UI steps in the matching client reference.`;
 
 const OUTRO = `## After setup
 
