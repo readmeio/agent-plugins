@@ -6,6 +6,8 @@ These commands can be run by Claude Code (in either the CLI or the desktop app),
 
 *Note: If the user only uses Claude Code via the desktop app, they can instead install the plugin via the app UI by following `./claude-chat.md`. This is NOT recommended - the API key cannot be edited after it is configured, and the plugin will not be available in the Claude Code CLI. Do not install via both methods, as this will result in duplicate ReadMe MCP servers.*
 
+*Note 2: Claude code cloud agents should refer to the `./claude-chat.md` file - they must install via apps rather than locally in their cloud environment.
+
 ## Install the ReadMe Plugin
 
 *Note: Only run this step if the user does not already have the ReadMe Plugin available*.
