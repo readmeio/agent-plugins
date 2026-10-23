@@ -7,7 +7,7 @@ Work out which client and surface you are running in, then follow only the match
 | Environment | Section |
 | --- | --- |
 | Claude Code CLI or the desktop Code tab | "Claude Code connection" |
-| Claude Desktop Chat or claude.ai | "Claude Chat connection" |
+| Claude Desktop Chat, Claude Code cloud agents, or claude.ai | "Claude Chat connection" |
 
 ## Claude Code connection
 
@@ -16,6 +16,8 @@ Applies to the Claude Code CLI and the Code tab in the Claude Desktop App. For t
 These commands can be run by Claude Code (in either the CLI or the desktop app), or the user can run them manually.
 
 *Note: If the user only uses Claude Code via the desktop app, they can instead install the plugin via the app UI by following the "Claude Chat connection" section. This is NOT recommended - the API key cannot be edited after it is configured, and the plugin will not be available in the Claude Code CLI. Do not install via both methods, as this will result in duplicate ReadMe MCP servers.*
+
+*Note 2: Claude code cloud agents should refer to the the "Claude Chat connection" section file - they must install via apps rather than locally in their cloud environment.
 
 ### Install the ReadMe Plugin
 
@@ -67,7 +69,7 @@ That you are able to successfully list tools from the ReadMe MCP server. The use
 
 ## Claude Chat connection
 
-Applies to the Chat interface in the Claude Desktop App. For Claude Code (CLI or the desktop Code tab) refer to the "Claude Code connection" section instead.
+Applies to the Chat interface in the Claude Desktop App AND claude code cloud agents. For Claude Code (CLI or the desktop Code tab) refer to the "Claude Code connection" section instead.
 
 *Note: claude.ai web is not supported - it does not allow setting headers on the MCP connector, so the ReadMe API key cannot be configured. Use the Claude Desktop App or Claude Code instead.*
 

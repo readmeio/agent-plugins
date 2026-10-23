@@ -16,8 +16,8 @@ Work out which client and surface you are running in, then follow only the match
 | --- | --- |
 | Cursor IDE, Cursor web, or Cursor CLI | "Cursor connection" |
 | Claude Code CLI or the desktop Code tab | "Claude Code connection" |
-| Claude Desktop Chat or claude.ai | "Claude Chat connection" |
-| ChatGPT web or desktop, Codex desktop app, or Codex CLI | "ChatGPT & Codex Connections" |
+| Claude Desktop Chat, Claude Code cloud agents, or claude.ai | "Claude Chat connection" |
+| ChatGPT web or desktop, Codex desktop app, Codex CLI, Codex cloud agents | "ChatGPT & Codex Connections" |
 | Any other agent, including local coding agents, or a user who does not want a plugin | "Other agents connection (no plugin)" |
 
 ## Cursor connection
@@ -63,6 +63,8 @@ Applies to the Claude Code CLI and the Code tab in the Claude Desktop App. For t
 These commands can be run by Claude Code (in either the CLI or the desktop app), or the user can run them manually.
 
 *Note: If the user only uses Claude Code via the desktop app, they can instead install the plugin via the app UI by following the "Claude Chat connection" section. This is NOT recommended - the API key cannot be edited after it is configured, and the plugin will not be available in the Claude Code CLI. Do not install via both methods, as this will result in duplicate ReadMe MCP servers.*
+
+*Note 2: Claude code cloud agents should refer to the the "Claude Chat connection" section file - they must install via apps rather than locally in their cloud environment.
 
 ### Install the ReadMe Plugin
 
@@ -114,7 +116,7 @@ That you are able to successfully list tools from the ReadMe MCP server. The use
 
 ## Claude Chat connection
 
-Applies to the Chat interface in the Claude Desktop App. For Claude Code (CLI or the desktop Code tab) refer to the "Claude Code connection" section instead.
+Applies to the Chat interface in the Claude Desktop App AND claude code cloud agents. For Claude Code (CLI or the desktop Code tab) refer to the "Claude Code connection" section instead.
 
 *Note: claude.ai web is not supported - it does not allow setting headers on the MCP connector, so the ReadMe API key cannot be configured. Use the Claude Desktop App or Claude Code instead.*
 
@@ -246,6 +248,12 @@ codex mcp add readme_projectB \
 #### Confirmation
 
 Ensure that the MCP server is visible and that you can run tools to verify that the step has been successfully completed.
+
+### Codex Cloud Agents
+
+Codex cloud agents cannot run these setup steps themselves. You must instruct the user to run the commands and give them the option to configure via the user-interface too.
+
+If they ask to use the user interface, give them the ways to setup in the UI.
 
 ## Other agents connection (no plugin)
 
