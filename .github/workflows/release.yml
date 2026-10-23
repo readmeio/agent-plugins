@@ -1,0 +1,83 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'prompts/**'
+      - 'skills/**'
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version type (patch, minor, major)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # npm trusted publishing
+
+    steps:
+      # Tags pushed with GITHUB_TOKEN don't trigger other workflows, so the tag is pushed as the
+      # "ai-deploy-readme" app to start update-downstream-deps.yml.
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          app-id: ${{ secrets.AI_DEPLOY_APP_ID }}
+          private-key: ${{ secrets.AI_DEPLOY_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: agent-plugins
+
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+
+      # Trusted publishing needs npm 11.5.1 or later.
+      - run: npm install -g npm@11
+
+      - run: node scripts/build-prompts.mjs --check
+      - run: npm test
+
+      # The version lives in tags and npm only; package.json on main stays at 0.0.0, so no version
+      # commit has to get past branch protection. Bumping past npm as well as tags means a run whose
+      # tag push failed never leaves a version that a later run would reuse.
+      - name: Bump version from the latest tag or npm release
+        id: version
+        env:
+          VERSION_TYPE: ${{ inputs.version_type || 'patch' }}
+        run: |
+          LATEST_TAG=$(git tag --list 'v*.*.*' --sort=-version:refname | head -n 1)
+          LATEST_NPM=$(npm view @readme/agent-plugins version 2> /dev/null || true)
+          LATEST=$(printf '%s\n' "${LATEST_TAG#v}" "$LATEST_NPM" | sed '/^$/d' | sort -V | tail -n 1)
+          if [ -n "$LATEST" ]; then
+            npm pkg set version="$LATEST"
+          fi
+          npm version "$VERSION_TYPE" --no-git-tag-version
+          echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - run: npm publish
+
+      - name: Push release tag after the package is published
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          git tag "v$VERSION"
+          git push origin "v$VERSION"
