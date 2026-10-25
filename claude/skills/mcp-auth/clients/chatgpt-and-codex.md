@@ -87,3 +87,10 @@ codex mcp add readme_projectB \
 ### Confirmation
 
 Ensure that the MCP server is visible and that you can run tools to verify that the step has been successfully completed.
+
+## Codex Cloud Agents
+
+Codex cloud agents cannot run these setup steps. Instead, they MUST setup via the UI. Give the user instructions for how to set this up manually through their UI.
+
+This is a mix of the plugin, and a custom MCP server using the details provided here. On getting the API key the user must set it up manually themselves.
+
