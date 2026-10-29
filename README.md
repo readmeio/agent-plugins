@@ -42,7 +42,7 @@ agent-plugins/
 ├── claude/
 │   ├── .claude-plugin/plugin.json
 │   ├── .mcp.json
-│   ├── skills/                       # Generated from ../skills
+│   ├── skills/                       # Frozen snapshot of ../skills, re-synced by hand
 │   └── README.md
 ├── codex/
 │   ├── plugin.json                   # Agent Plugins 1.0.0 manifest
@@ -61,7 +61,7 @@ driving a browser, installing the plugin by hand — is a per-client table insid
 there is one copy of every fact. They carry only what the MCP server cannot tell an agent at
 runtime; route maps come from `list-endpoints` and `get-endpoint`, not from a skill.
 
-Edit `skills/` and nothing else, then regenerate the three published copies:
+Edit `skills/` and nothing else, then regenerate the Codex and Cursor copies:
 
 ```
 node scripts/sync-skills.mjs
@@ -69,6 +69,14 @@ node scripts/sync-skills.mjs
 
 CI runs `node scripts/sync-skills.mjs --check` and fails if a client copy has drifted. Each client
 ships its own directory because each marketplace submission reads only that directory.
+
+`claude/skills/` is left out on purpose. Anthropic reviews the `claude/` directory for its plugin
+directory, and every change to it sends the submission to the back of the review queue. Re-sync it
+only when we mean to resubmit:
+
+```
+rm -rf claude/skills && cp -R skills claude/skills
+```
 
 ## Authentication
 
