@@ -78,10 +78,10 @@ and is only hosted on the docs site. Do not edit it by hand.
 
 `claude/skills/` is left out on purpose. Anthropic reviews the `claude/` directory for its plugin
 directory, and every change to it sends the submission to the back of the review queue. Re-sync it
-only when we mean to resubmit:
+only when we mean to resubmit, leaving out the install skill like the other plugins:
 
 ```
-rm -rf claude/skills && cp -R skills claude/skills
+rm -rf claude/skills && cp -R skills claude/skills && rm -rf claude/skills/install-readme-mcp-and-skills
 ```
 
 ## Setup prompts

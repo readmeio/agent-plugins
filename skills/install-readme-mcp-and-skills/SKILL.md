@@ -24,33 +24,31 @@ Work out which client and surface you are running in, then follow only the match
 
 Applies to the Cursor IDE, Cursor web, and the Cursor CLI (`agent`). A plugin installed at user scope in any one is available in the others. Install the plugin once. Cursor web follows the same steps as the Cursor UI below.
 
-### Install the ReadMe Plugin
+The plugin includes the ReadMe MCP server, so installing the plugin is the whole setup.
 
-*Note: Only do this if the user does not already have the ReadMe plugin available.*
+### Install the ReadMe Plugin
 
 #### Cursor UI
 
 1. Open **Customize** in the sidebar.
 2. Search for **ReadMe**.
 3. Find the "Readme" plugin with author "ReadMe" and select **Add**.
-4. If the user is working on an existing project (they may be setting up a new project for the first time) set the **ReadMe API key** when prompted - this can be left blank for the moment. The user can acess this key via **Settings → API Keys** in their ReadMe project. 
-  1. It can be set later by navigating to the ReadMe plugin in the UI and selecting **Configure**.
-
-*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case leave the api key as a placeholder and when the user creates their project the user/you can modify the configuration with the actual API key.*
+4. When Cursor prompts, sign in with a ReadMe account.
 
 In the IDE chat, running the command `/add-plugin readme` will also do the same.
 
-#### Cursor CLI - `agent` (Not recommended)
+#### Cursor CLI - `agent`
 
-The ReadMe plugin can be installed from a running `agent` session - this must be performed by an agent.
+Cursor's `agent` cannot sign in to MCP servers with OAuth yet, so the plugin's MCP server does not authenticate there.
 
-1. Start `agent`
-2. Run the `/plugin` slash command
-3. Cycle to the "Marketplace" for the installed plugins
-4. Search for "readme"
-5. Select "ReadMe" from the Cursor Plugin Marketplace
-  1. Here you can select to install for yourself (user scope) or for the project you are in (project scope). If you are working in a BiDi synced repository, it is recommended to use project scope, but for MCP it is best to use the user scope.
-6. You must configure your API key via the Cursor Application - the agent does not expose any way to add environment keys to config. This is why this configuration method is not recommended.
+1. Install the plugin through the Cursor UI steps above. Its skills are then available in `agent` too.
+2. Connect the MCP server with a project API key instead (see Project API keys in the main skill). The user should run this themselves in a terminal and pick Cursor when prompted. `add-mcp` prompts for `README_API_KEY`, so the key never enters the chat or shell history:
+
+```sh
+npx add-mcp "https://docs.readme.com/mcp" --name readme -g --header 'Authorization: Bearer ${README_API_KEY}'
+```
+
+Keep the single quotes so the shell does not expand the variable. `-g` writes to the user-level Cursor config, which keeps the key out of project files.
 
 #### Confirmation
 
@@ -58,17 +56,11 @@ Confirm that the ReadMe plugin is installed, that its skills are available, and 
 
 ## Claude Code connection
 
-Applies to the Claude Code CLI and the Code tab in the Claude Desktop App. For the Chat interface in the Claude Desktop App or claude.ai refer to the "Claude Chat connection" section instead.
+Applies to the Claude Code CLI and the Code tab in the Claude Desktop App. For claude code cloud agents, the Chat interface in the Claude Desktop App or claude.ai refer to the "Claude Chat connection" section instead.
 
 These commands can be run by Claude Code (in either the CLI or the desktop app), or the user can run them manually.
 
-*Note: If the user only uses Claude Code via the desktop app, they can instead install the plugin via the app UI by following the "Claude Chat connection" section. This is NOT recommended - the API key cannot be edited after it is configured, and the plugin will not be available in the Claude Code CLI. Do not install via both methods, as this will result in duplicate ReadMe MCP servers.*
-
-*Note 2: Claude code cloud agents should refer to the the "Claude Chat connection" section file - they must install via apps rather than locally in their cloud environment.
-
 ### Install the ReadMe Plugin
-
-*Note: Only run this step if the user does not already have the ReadMe Plugin available*.
 
 You must add the ReadMe plugin marketplace from the official agent-plugins repository, then install the plugin from that marketplace.
 
@@ -90,68 +82,35 @@ claude plugin marketplace add https://github.com/readmeio/agent-plugins.git --sc
 claude plugin install readme@readme --scope project
 ```
 
-The API key is never committed to the repository - it is kept in the user's OS keychain. Each contributor must configure their own API key.
+Nothing secret is committed. Each contributor signs in with their own ReadMe account.
+
+#### NOTE - restarting sessions
+
+The user may have to restart their environment for the MCP server to reload. In that case ALWAYS recommend they quit and come back to this same session to continue - don't recommend that they start a new conversation.
 
 #### Confirmation
 
 That you are able to successfully read skills from the installed ReadMe plugin.
 
-### Configure the API key
-
-The user can access their API key via **Settings → API Keys** in their ReadMe project.
-
-*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case skip this step and when the user creates their project the user/you can configure the actual API key.*
-
-The user should run this themselves so that the key is not written to their shell history:
-
-```sh
-read -rsp "Input your ReadMe API key: " README_API_KEY && printf '{"api_key":"%s"}' "$README_API_KEY" | claude plugin configure readme@readme --values-stdin
-```
-
-Alternatively, running `claude plugin configure readme@readme` will prompt the user for the key.
-
-#### Confirmation
-
-That you are able to successfully list tools from the ReadMe MCP server. The user may need to restart their session before the configuration is recognized.
-
 ## Claude Chat connection
 
-Applies to the Chat interface in the Claude Desktop App AND claude code cloud agents. For Claude Code (CLI or the desktop Code tab) refer to the "Claude Code connection" section instead.
-
-*Note: claude.ai web is not supported - it does not allow setting headers on the MCP connector, so the ReadMe API key cannot be configured. Use the Claude Desktop App or Claude Code instead.*
+Applies to the Chat interface in the Claude Desktop App, Claude web app (claude.ai) AND claude code cloud agents (must be installed in the UI). For Claude Code (CLI or the desktop Code tab) refer to the "Claude Code connection" section instead.
 
 ### Install the ReadMe Plugin
-
-*Note: Only do this if the user does not already have the ReadMe plugin available.*
 
 The user can install the ReadMe plugin via UI by following these steps:
 
 1. Navigate to Plugins from Customize -> Plugins and select the "Add" button, select "Add Marketplace"
 2. From the pop-up menu, select "Add from a Repository" and paste in the official Readme agent plugins repository: https://github.com/readmeio/agent-plugins
-3. Select "Sync Automatically" (optional, this keeps your plugin up to date with our latest changes) and select "Sync"
-4. Navigate back to Plugins and search for "ReadMe" and click on the "ReadMe" result with "yours" on it. Once inside, click the "Add" button.
+3. Disable "Sync Automatically" and click "Sync"
+4. Navigate back to Plugins and search for "ReadMe" and click on the "ReadMe" result with "yours" label on it. Once inside, click the "Add" button.
+5. In the plugin, you must click on the "Connectors" tab, and select "Connect" on the connector that comes along with the plugin. Leave the settings as defaults when options are given to you, and sign in with a ReadMe account.
+
+At this point the mcp connection is ready, and the skills will be in the environment.
 
 #### Confirmation
 
 Confirm that the ReadMe plugin is installed and that its skills are available.
-
-### Install the MCP Server
-
-The user must manually connect to the MCP server via the "Connector" tab on the plugin - select it, and click on the "Connect" button.
-
-1. On the pop-up menu select "Continue"
-2. For Authentication, leave it as "No sign-in"
-  1. If the user has a ReadMe API key they should click on the "Add Header", select "authorization" as the header type, and have value `Bearer YOUR_README_API_KEY` using their actual API key. The user can access this key via **Settings → API Keys** in their ReadMe project.
-3. Leave the Advanced settings as they are (should be streamable HTTP)
-4. Click "Add" to finish
-
-*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case leave the header out and when the user creates their project they must re-configure the connector with the actual API key.*
-
-*Note: Claude does not expose a way to edit the MCP settings after originally configuring them - the user must remove and re-add the connector to change their API key.*
-
-#### Confirmation
-
-Ensure that the MCP server is visible and that you can run tools to verify that the step has been successfully completed.
 
 ## ChatGPT & Codex Connections
 
@@ -171,7 +130,7 @@ The ChatGPT desktop app bundles its own `codex` binary, so the user does not nee
 
 ### Install the ReadMe Plugin
 
-*Note: Only run this step if the user does not already have the ReadMe Plugin available*.
+The plugin includes the ReadMe MCP server, so installing the plugin is the whole setup.
 
 #### ChatGPT Web
 
@@ -199,61 +158,7 @@ enabled = true
 
 #### Confirmation
 
-To confirm successful installation, verify that you can now see the ReadMe plugin and its available skills. The user may have to restart their application for this installation to be recognized.
-
-### Install the ReadMe MCP Server
-
-Unfortunately, due to constraints from OpenAI the ReadMe MCP server cannot be installed with authentication via the plugin and must be configured manually.
-
-#### ChatGPT Web
-
-Currently no MCP configuration is supported via ChatGPT web due to limitations from OpenAI. Install and use either the desktop application or the Codex CLI instead.
-
-#### Codex CLI & ChatGPT Desktop App
-
-*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case register the server without authentication, and once the user has created their project re-run the steps below with their actual API key (run `codex mcp remove readme` first if Codex reports that the server already exists). Do not use `--bearer-token-env-var` with an unset variable - Codex fails to start the MCP server.*
-
-```sh
-codex mcp add readme --url https://docs.readme.com/mcp
-```
-
-With an API key:
-
-```sh
-codex mcp add readme \
-  --url https://docs.readme.com/mcp \
-  --bearer-token-env-var README_API_KEY
-```
-
-The user must then set `README_API_KEY` in their environment. The ChatGPT desktop app does not inherit environment variables from the user's shell - if the user uses the desktop app, set the header directly in `~/.codex/config.toml` instead:
-
-```toml
-[mcp_servers.readme]
-url = "https://docs.readme.com/mcp"
-http_headers = { Authorization = "Bearer YOUR_README_API_KEY" }
-```
-
-If the user wants to connect to more than one ReadMe project, register an MCP server per project with the same URL but different names:
-
-```sh
-codex mcp add readme_projectA \
-  --url https://docs.readme.com/mcp \
-  --bearer-token-env-var README_PROJECT_A_API_KEY
-
-codex mcp add readme_projectB \
-  --url https://docs.readme.com/mcp \
-  --bearer-token-env-var README_PROJECT_B_API_KEY
-```
-
-#### Confirmation
-
-Ensure that the MCP server is visible and that you can run tools to verify that the step has been successfully completed.
-
-### Codex Cloud Agents
-
-Codex cloud agents cannot run these setup steps themselves. You must instruct the user to run the commands and give them the option to configure via the user-interface too.
-
-If they ask to use the user interface, give them the ways to setup in the UI.
+Verify that you can now see the ReadMe plugin, its skills, and the ReadMe MCP server's tools. The user may have to restart their application for this installation to be recognized.
 
 ## Other agents connection (no plugin)
 
@@ -266,11 +171,7 @@ This setup does not use a plugin. It uses two separate CLIs:
 
 Both need Node.js. Both detect installed agents and ask which ones to target; use `-a <agent>` to pick one directly.
 
-*Note: Do not combine this with a ReadMe plugin in the same agent. It results in duplicate skills and duplicate ReadMe MCP servers.*
-
 ### Install the ReadMe skills
-
-*Note: Only run this step if the user does not already have the ReadMe skills available.*
 
 ```sh
 npx skills add readmeio/agent-plugins
@@ -290,21 +191,17 @@ That you are able to read the ReadMe skills, e.g. `managing-readme-docs`.
 ### Add the ReadMe MCP server
 
 ```sh
-npx add-mcp "https://docs.readme.com/mcp?projects=developers" --name readme
+npx add-mcp "https://docs.readme.com/mcp" --name readme
 ```
 
-This takes the same `-g` and `-a <agent>` flags. Without an API key the server only has read access to public docs.
+This takes the same `-g` and `-a <agent>` flags. Agents that support MCP OAuth prompt the user to sign in with their ReadMe account, either when the server connects or on the first `execute-request`.
 
-#### Configure the API key
+#### Agents without OAuth support
 
-The user can access their API key via **Settings → API Keys** in their ReadMe project.
-
-*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case skip this step and when the user creates their project the user/you can configure the actual API key.*
-
-The user should run this themselves in a terminal. `add-mcp` prompts for `README_API_KEY`, so the key never enters the chat or shell history:
+An agent that cannot sign in with OAuth uses a project API key instead (see Project API keys in the main skill). The user should run this themselves in a terminal. `add-mcp` prompts for `README_API_KEY`, so the key never enters the chat or shell history:
 
 ```sh
-npx add-mcp "https://docs.readme.com/mcp?projects=developers" --name readme --header 'Authorization: Bearer ${README_API_KEY}'
+npx add-mcp "https://docs.readme.com/mcp" --name readme --header 'Authorization: Bearer ${README_API_KEY}'
 ```
 
 Keep the single quotes so the shell does not expand the variable. Re-running with the same name replaces the anonymous `readme` entry.

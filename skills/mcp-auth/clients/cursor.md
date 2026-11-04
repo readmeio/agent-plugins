@@ -17,9 +17,16 @@ In the IDE chat, running the command `/add-plugin readme` will also do the same.
 
 ### Cursor CLI - `agent`
 
-Unfortunately Cursor's `agent` does not work with OAuth at the moment - and you must instead use Cursor UI. Refer to the `./other-agents.md` file for context on how to do this for a client without OAauth support.
+Cursor's `agent` cannot sign in to MCP servers with OAuth yet, so the plugin's MCP server does not authenticate there.
 
-Traditional API keys do work with the `agent` configuration though.
+1. Install the plugin through the Cursor UI steps above. Its skills are then available in `agent` too.
+2. Connect the MCP server with a project API key instead (see Project API keys in the main skill). The user should run this themselves in a terminal and pick Cursor when prompted. `add-mcp` prompts for `README_API_KEY`, so the key never enters the chat or shell history:
+
+```sh
+npx add-mcp "https://docs.readme.com/mcp" --name readme -g --header 'Authorization: Bearer ${README_API_KEY}'
+```
+
+Keep the single quotes so the shell does not expand the variable. `-g` writes to the user-level Cursor config, which keeps the key out of project files.
 
 ### Confirmation
 

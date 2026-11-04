@@ -2,6 +2,10 @@ Set me up with the ReadMe skills and MCP server in this agent, then help me crea
 
 The instructions below call me "the user". Skip any step that is already done. When a step can only be done by me (in an app's UI, or in my own terminal so that my API key stays out of the chat), tell me exactly what to do and wait for me to confirm.
 
+## Cloud Agent
+
+If you are running in a cloud or remote sandbox (e.g. Claude Code on the web, Codex cloud, Cursor background agents), do not install plugins or write MCP config inside the sandbox. It is temporary and is not the user's app config. Direct the user to configure the plugin/connector and API key through the app's own settings, then follow the UI steps in the matching client reference.
+
 ## ChatGPT & Codex Connections
 
 Applies to ChatGPT web and desktop, Codex in the ChatGPT desktop application, and the Codex CLI. The Codex CLI and the ChatGPT desktop app share the same `~/.codex/config.toml`, so configuring one configures both.
@@ -20,7 +24,7 @@ The ChatGPT desktop app bundles its own `codex` binary, so the user does not nee
 
 ### Install the ReadMe Plugin
 
-*Note: Only run this step if the user does not already have the ReadMe Plugin available*.
+The plugin includes the ReadMe MCP server, so installing the plugin is the whole setup.
 
 #### ChatGPT Web
 
@@ -48,61 +52,7 @@ enabled = true
 
 #### Confirmation
 
-To confirm successful installation, verify that you can now see the ReadMe plugin and its available skills. The user may have to restart their application for this installation to be recognized.
-
-### Install the ReadMe MCP Server
-
-Unfortunately, due to constraints from OpenAI the ReadMe MCP server cannot be installed with authentication via the plugin and must be configured manually.
-
-#### ChatGPT Web
-
-Currently no MCP configuration is supported via ChatGPT web due to limitations from OpenAI. Install and use either the desktop application or the Codex CLI instead.
-
-#### Codex CLI & ChatGPT Desktop App
-
-*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case register the server without authentication, and once the user has created their project re-run the steps below with their actual API key (run `codex mcp remove readme` first if Codex reports that the server already exists). Do not use `--bearer-token-env-var` with an unset variable - Codex fails to start the MCP server.*
-
-```sh
-codex mcp add readme --url https://docs.readme.com/mcp
-```
-
-With an API key:
-
-```sh
-codex mcp add readme \
-  --url https://docs.readme.com/mcp \
-  --bearer-token-env-var README_API_KEY
-```
-
-The user must then set `README_API_KEY` in their environment. The ChatGPT desktop app does not inherit environment variables from the user's shell - if the user uses the desktop app, set the header directly in `~/.codex/config.toml` instead:
-
-```toml
-[mcp_servers.readme]
-url = "https://docs.readme.com/mcp"
-http_headers = { Authorization = "Bearer YOUR_README_API_KEY" }
-```
-
-If the user wants to connect to more than one ReadMe project, register an MCP server per project with the same URL but different names:
-
-```sh
-codex mcp add readme_projectA \
-  --url https://docs.readme.com/mcp \
-  --bearer-token-env-var README_PROJECT_A_API_KEY
-
-codex mcp add readme_projectB \
-  --url https://docs.readme.com/mcp \
-  --bearer-token-env-var README_PROJECT_B_API_KEY
-```
-
-#### Confirmation
-
-Ensure that the MCP server is visible and that you can run tools to verify that the step has been successfully completed.
-
-### Codex Cloud Agents
-
-Codex cloud agents cannot run these setup steps themselves. You must instruct the user to run the commands and give them the option to configure via the user-interface too.
-
-If they ask to use the user interface, give them the ways to setup in the UI.
+Verify that you can now see the ReadMe plugin, its skills, and the ReadMe MCP server's tools. The user may have to restart their application for this installation to be recognized.
 
 ## After setup
 

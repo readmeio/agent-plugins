@@ -2,6 +2,10 @@ Set me up with the ReadMe skills and MCP server in this agent, then help me crea
 
 The instructions below call me "the user". Skip any step that is already done. When a step can only be done by me (in an app's UI, or in my own terminal so that my API key stays out of the chat), tell me exactly what to do and wait for me to confirm.
 
+## Cloud Agent
+
+If you are running in a cloud or remote sandbox (e.g. Claude Code on the web, Codex cloud, Cursor background agents), do not install plugins or write MCP config inside the sandbox. It is temporary and is not the user's app config. Direct the user to configure the plugin/connector and API key through the app's own settings, then follow the UI steps in the matching client reference.
+
 ## Other agents connection (no plugin)
 
 Applies to any agent without a ReadMe plugin, including local coding agents such as OpenCode, Gemini CLI, GitHub Copilot CLI, VS Code, and Windsurf. It also works for Claude Code, Codex, and Cursor if the user does not want a plugin.
@@ -13,11 +17,7 @@ This setup does not use a plugin. It uses two separate CLIs:
 
 Both need Node.js. Both detect installed agents and ask which ones to target; use `-a <agent>` to pick one directly.
 
-*Note: Do not combine this with a ReadMe plugin in the same agent. It results in duplicate skills and duplicate ReadMe MCP servers.*
-
 ### Install the ReadMe skills
-
-*Note: Only run this step if the user does not already have the ReadMe skills available.*
 
 ```sh
 npx skills add readmeio/agent-plugins
@@ -37,21 +37,17 @@ That you are able to read the ReadMe skills, e.g. `managing-readme-docs`.
 ### Add the ReadMe MCP server
 
 ```sh
-npx add-mcp "https://docs.readme.com/mcp?projects=developers" --name readme
+npx add-mcp "https://docs.readme.com/mcp" --name readme
 ```
 
-This takes the same `-g` and `-a <agent>` flags. Without an API key the server only has read access to public docs.
+This takes the same `-g` and `-a <agent>` flags. Agents that support MCP OAuth prompt the user to sign in with their ReadMe account, either when the server connects or on the first `execute-request`.
 
-#### Configure the API key
+#### Agents without OAuth support
 
-The user can access their API key via **Settings → API Keys** in their ReadMe project.
-
-*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case skip this step and when the user creates their project the user/you can configure the actual API key.*
-
-The user should run this themselves in a terminal. `add-mcp` prompts for `README_API_KEY`, so the key never enters the chat or shell history:
+An agent that cannot sign in with OAuth uses a project API key instead (see Project API keys in the main skill). The user should run this themselves in a terminal. `add-mcp` prompts for `README_API_KEY`, so the key never enters the chat or shell history:
 
 ```sh
-npx add-mcp "https://docs.readme.com/mcp?projects=developers" --name readme --header 'Authorization: Bearer ${README_API_KEY}'
+npx add-mcp "https://docs.readme.com/mcp" --name readme --header 'Authorization: Bearer ${README_API_KEY}'
 ```
 
 Keep the single quotes so the shell does not expand the variable. Re-running with the same name replaces the anonymous `readme` entry.

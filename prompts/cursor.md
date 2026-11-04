@@ -2,37 +2,39 @@ Set me up with the ReadMe skills and MCP server in this agent, then help me crea
 
 The instructions below call me "the user". Skip any step that is already done. When a step can only be done by me (in an app's UI, or in my own terminal so that my API key stays out of the chat), tell me exactly what to do and wait for me to confirm.
 
+## Cloud Agent
+
+If you are running in a cloud or remote sandbox (e.g. Claude Code on the web, Codex cloud, Cursor background agents), do not install plugins or write MCP config inside the sandbox. It is temporary and is not the user's app config. Direct the user to configure the plugin/connector and API key through the app's own settings, then follow the UI steps in the matching client reference.
+
 ## Cursor connection
 
 Applies to the Cursor IDE, Cursor web, and the Cursor CLI (`agent`). A plugin installed at user scope in any one is available in the others. Install the plugin once. Cursor web follows the same steps as the Cursor UI below.
 
-### Install the ReadMe Plugin
+The plugin includes the ReadMe MCP server, so installing the plugin is the whole setup.
 
-*Note: Only do this if the user does not already have the ReadMe plugin available.*
+### Install the ReadMe Plugin
 
 #### Cursor UI
 
 1. Open **Customize** in the sidebar.
 2. Search for **ReadMe**.
 3. Find the "Readme" plugin with author "ReadMe" and select **Add**.
-4. If the user is working on an existing project (they may be setting up a new project for the first time) set the **ReadMe API key** when prompted - this can be left blank for the moment. The user can acess this key via **Settings → API Keys** in their ReadMe project. 
-  1. It can be set later by navigating to the ReadMe plugin in the UI and selecting **Configure**.
-
-*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case leave the api key as a placeholder and when the user creates their project the user/you can modify the configuration with the actual API key.*
+4. When Cursor prompts, sign in with a ReadMe account.
 
 In the IDE chat, running the command `/add-plugin readme` will also do the same.
 
-#### Cursor CLI - `agent` (Not recommended)
+#### Cursor CLI - `agent`
 
-The ReadMe plugin can be installed from a running `agent` session - this must be performed by an agent.
+Cursor's `agent` cannot sign in to MCP servers with OAuth yet, so the plugin's MCP server does not authenticate there.
 
-1. Start `agent`
-2. Run the `/plugin` slash command
-3. Cycle to the "Marketplace" for the installed plugins
-4. Search for "readme"
-5. Select "ReadMe" from the Cursor Plugin Marketplace
-  1. Here you can select to install for yourself (user scope) or for the project you are in (project scope). If you are working in a BiDi synced repository, it is recommended to use project scope, but for MCP it is best to use the user scope.
-6. You must configure your API key via the Cursor Application - the agent does not expose any way to add environment keys to config. This is why this configuration method is not recommended.
+1. Install the plugin through the Cursor UI steps above. Its skills are then available in `agent` too.
+2. Connect the MCP server with a project API key instead (see Project API keys in the main skill). The user should run this themselves in a terminal and pick Cursor when prompted. `add-mcp` prompts for `README_API_KEY`, so the key never enters the chat or shell history:
+
+```sh
+npx add-mcp "https://docs.readme.com/mcp" --name readme -g --header 'Authorization: Bearer ${README_API_KEY}'
+```
+
+Keep the single quotes so the shell does not expand the variable. `-g` writes to the user-level Cursor config, which keeps the key out of project files.
 
 #### Confirmation
 
