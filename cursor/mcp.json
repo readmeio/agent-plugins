@@ -1,6 +1,9 @@
 {
   "mcpServers": {
     "readme": {
+      "headers": {
+        "Authorization": "Bearer ${README_API_KEY}"
+      },
       "type": "http",
       "url": "https://docs.readme.com/mcp"
     }
