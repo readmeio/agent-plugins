@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const source = join(repoRoot, 'skills');
-const hosts = ['claude', 'codex', 'cursor'];
+const hosts = ['codex', 'cursor'];
 // Installs the plugins themselves, so it is hosted on the docs site rather than shipped in them.
 const notInPlugins = ['install-readme-mcp-and-skills'];
 

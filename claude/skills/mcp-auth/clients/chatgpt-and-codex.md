@@ -56,13 +56,7 @@ Currently no MCP configuration is supported via ChatGPT web due to limitations f
 
 ### Codex CLI & ChatGPT Desktop App
 
-*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case register the server without authentication, and once the user has created their project re-run the steps below with their actual API key (run `codex mcp remove readme` first if Codex reports that the server already exists). Do not use `--bearer-token-env-var` with an unset variable - Codex fails to start the MCP server.*
-
-```sh
-codex mcp add readme --url https://docs.readme.com/mcp
-```
-
-With an API key:
+*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case leave the api key as a placeholder and when the user creates their project the user/you can modify the configuration with the actual API key.*
 
 ```sh
 codex mcp add readme \
@@ -96,6 +90,7 @@ Ensure that the MCP server is visible and that you can run tools to verify that 
 
 ## Codex Cloud Agents
 
-Codex cloud agents cannot run these setup steps themselves. You must instruct the user to run the commands and give them the option to configure via the user-interface too.
+Codex cloud agents cannot run these setup steps. Instead, they MUST setup via the UI. Give the user instructions for how to set this up manually through their UI.
 
-If they ask to use the user interface, give them the ways to setup in the UI.
+This is a mix of the plugin, and a custom MCP server using the details provided here. On getting the API key the user must set it up manually themselves.
+

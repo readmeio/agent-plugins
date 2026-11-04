@@ -47,7 +47,7 @@ ReadMe documentation is git-backed, meaning that ReadMe supports:
 
 ## Confirming the active Project
 
-Use the `execute-request` tool to execute a request against the `/v2/projects/me` to get information on the current project. If this project conflicts with what the user is asking for, or if there is an issue connecting to the project use the `mcp-auth` skill to work with the user to setup their project.
+Every `execute-request` call to `https://api.readme.com/v2/...` names its project with the `x-readme-subdomain` header. Ask the user which project to use when it is unclear. Use the `execute-request` tool to execute a request against the `/v2/projects/me` with that header to get information on the current project. If the request fails authentication, use the `mcp-auth` skill to work with the user to connect.
 
 If the user is performing first-time setup on ReadMe use the `setup-project` skill.
 

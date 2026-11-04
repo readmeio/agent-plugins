@@ -26,3 +26,6 @@ ReadMe API keys are scoped to a single project only. To edit multiple projects, 
 
 ReadMe does not currently offer OAuth via MCP.
 
+## Cloud Agents
+
+If you are running in a cloud or remote sandbox (e.g. Claude Code on the web, Codex cloud, Cursor background agents), do not install plugins or write MCP config inside the sandbox. It is temporary and is not the user's app config. Direct the user to configure the plugin/connector and API key through the app's own settings, then follow the UI steps in the matching client reference.
