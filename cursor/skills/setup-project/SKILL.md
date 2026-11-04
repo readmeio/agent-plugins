@@ -10,7 +10,7 @@ This skill walks through the steps to setup a new ReadMe project, including the 
 ## Requirements
 
 - This skill assumes that the ReadMe MCP server has been configured. If you do not have the ReadMe MCP available, you must first follow the steps in the `mcp-auth` skill for the specific client and setup the ReadMe MCP server before you can setup a new ReadMe project. Note that you don't need to connect up to an actual project if the user is creating a new account.
-- Currently new project setup is only allowed if the user does not have an existing ReadMe account. If the user has an existing account, they must create their new project in the ReadMe UI, sign in with OAuth (see `mcp-auth`), and give you the project's subdomain.
+- Currently new project setup is only allowed if the user does not have an existing ReadMe account. If the user has an existing account, they must create their new project in the ReadMe UI, sign in with OAuth (see `mcp-auth`), and give you the project's subdomain. In Cursor, they set the project's API key instead of signing in with OAuth. They must use the `ai_onboarding` endpoint to make their new account and then they can use the api key returned from that endpoint to continue with account + project setup. For clients with OAuth the user should make their account via the UI instead.
 
 **Done**
 - You are connected to the ReadMe MCP server
@@ -123,7 +123,7 @@ Follow these steps in order, before doing any of the content plan:
    - The project is empty for now, and they will see content appear as you work on it.
    - They will eventually need to verify their email before publishing the project, but this does not block anything now.
 3. **Wait** until the user confirms they have signed in successfully.
-4. **Target the new project.** Send the `subdomain` returned when the account was created as the `x-readme-subdomain` header on every request. If the client asks the user to sign in, they sign in with the account they just created.
+4. **Target the new project.** Send the `subdomain` returned when the account was created as the `x-readme-subdomain` header on every request. If the client asks the user to sign in, they sign in with the account they just created. In Cursor, which uses project API keys, give the user the `token` returned when the account was created and have them set it as the ReadMe API key under the plugin's **Configure**.
 5. **Execute the content plan.**
 
 ## Intake branches
