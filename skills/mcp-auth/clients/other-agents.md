@@ -9,11 +9,7 @@ This setup does not use a plugin. It uses two separate CLIs:
 
 Both need Node.js. Both detect installed agents and ask which ones to target; use `-a <agent>` to pick one directly.
 
-*Note: Do not combine this with a ReadMe plugin in the same agent. It results in duplicate skills and duplicate ReadMe MCP servers.*
-
 ## Install the ReadMe skills
-
-*Note: Only run this step if the user does not already have the ReadMe skills available.*
 
 ```sh
 npx skills add readmeio/agent-plugins
@@ -33,21 +29,17 @@ That you are able to read the ReadMe skills, e.g. `managing-readme-docs`.
 ## Add the ReadMe MCP server
 
 ```sh
-npx add-mcp "https://docs.readme.com/mcp?projects=developers" --name readme
+npx add-mcp "https://docs.readme.com/mcp" --name readme
 ```
 
-This takes the same `-g` and `-a <agent>` flags. Without an API key the server only has read access to public docs.
+This takes the same `-g` and `-a <agent>` flags. Agents that support MCP OAuth prompt the user to sign in with their ReadMe account, either when the server connects or on the first `execute-request`.
 
-### Configure the API key
+### Agents without OAuth support
 
-The user can access their API key via **Settings → API Keys** in their ReadMe project.
-
-*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case skip this step and when the user creates their project the user/you can configure the actual API key.*
-
-The user should run this themselves in a terminal. `add-mcp` prompts for `README_API_KEY`, so the key never enters the chat or shell history:
+An agent that cannot sign in with OAuth uses a project API key instead (see Project API keys in the main skill). The user should run this themselves in a terminal. `add-mcp` prompts for `README_API_KEY`, so the key never enters the chat or shell history:
 
 ```sh
-npx add-mcp "https://docs.readme.com/mcp?projects=developers" --name readme --header 'Authorization: Bearer ${README_API_KEY}'
+npx add-mcp "https://docs.readme.com/mcp" --name readme --header 'Authorization: Bearer ${README_API_KEY}'
 ```
 
 Keep the single quotes so the shell does not expand the variable. Re-running with the same name replaces the anonymous `readme` entry.

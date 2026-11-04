@@ -1,31 +1,68 @@
 ---
 name: mcp-auth
-description: Configure authentication with ReadMe to manage documentation hosted on ReadMe. Use during first time setup, or when a project operation is rejected for missing, invalid, expired, or unresolved authentication.
+description: Install and authenticate ReadMe's plugin and MCP server. Use during first-time setup, when ReadMe's skills or MCP server are missing, or when a ReadMe request fails authentication.
 ---
 
-# Recover ReadMe MCP authentication
+# ReadMe MCP authentication
+
+## Assume the user is authenticated
+
+Treat the user as authenticated. Make ReadMe requests directly, and enter the [workflow](#workflow) only when ReadMe's skills or MCP server are missing from this session, or a request actually fails authentication. When the user says they have signed in, take that as done and retry.
+
+## Installed check
+
+The ReadMe plugin brings both the ReadMe skills and the ReadMe MCP server (with tools such as `execute-request`). Before any install step, check what this session already has:
+
+- **Skills and MCP server both available:** install nothing. Installing again creates duplicate skills and duplicate MCP servers.
+- **Only one available:** install only the missing piece, following the client reference.
+
+## Authentication
+
+### OAuth (recommended)
+
+The user signs in with their ReadMe account. One sign-in gives access to every project their account can reach, so recommend OAuth by default.
+
+When sign-in happens depends on the client:
+
+- Some clients ask the user to sign in as soon as the plugin or MCP server is installed or connected.
+- Others wait until the first `execute-request` that needs authentication. ReadMe returns `401`, and the client prompts the user to sign in.
+
+Both are expected. When a prompt appears, ask the user to complete sign-in in their client, then retry the original request.
+
+### Choosing the project
+
+Select the project on every `execute-request` call to `https://api.readme.com/v2/...` with the `x-readme-subdomain` header. OAuth requests require it.
+
+```json
+"headers": [{ "name": "x-readme-subdomain", "value": "<project-subdomain>" }]
+```
+
+Take the subdomain from the user, or from their docs URL (`https://<subdomain>.readme.io`). No endpoint lists a user's projects, so ask when the project is unclear. To work across several projects, change the header value per request; the one connection covers all of them.
+
+### Project API keys
+
+Offer a project API key only when the user asks for API key authentication, or their client cannot sign in with OAuth. A key reaches a single project.
+
+- The user creates the key in their project under **Settings → API Keys** (append `#/settings/api-keys` to any URL on their docs domain).
+- The key is sent as an `Authorization: Bearer <key>` header on the MCP server, set through the client's own MCP settings. Have the user enter it there themselves so the key stays out of the chat.
+- This is a separate MCP server entry from the plugin's. Have the user disable the plugin's ReadMe MCP server so the two don't duplicate.
+- `x-readme-subdomain` is optional with a key. When sent, it must match the key's project.
 
 ## Workflow
 
-1. **Classify.** Capture the failing operation and non-secret error response. Check whether the response actually indicates missing/rejected credentials rather than validation, insufficient permissions, plan restrictions, or a service outage.
-   **Done:** There is an authentication failure to repair, or the error is handed back to its owning workflow.
-2. **Identify the environment.** Establish the client that you are running in (for example Claude Code versus Claude Desktop Chat). Commonly you will have information available about the client and surface that you are running in; ask if unclear. Read only the matching [client connection reference](CLIENTS.md).
-   **Done:** You understand what client you are running in, and have rea the client connection reference for that client.
-3. **Setup.** If you have the API key already in the chat for the project the user is attempting to modify, and the client is one that you can update settings for without user's intervention then setup the connection yourself. Otherwise Direct the user to the intended ReadMe project's **Settings → API Keys** to get their API key (if you have the link to their documentation page, this is accessed by adding "#/settings/api-keys" to any url in that domain). If the client is one where you can configure the MCP configuration yourself, offer to setup the environment if they give you the API key, and tell them that they can setup the configuration themselves and give them the steps to do so.
-   **Done:** The user confirms the credential is configured, or you have setup yourself.
-4. **Verify and resume.** Use the `https://api.readme.com/v2/projects/me` endpoint via the MCP's `execute-request` to determine whether the correct project has been authenticated. After this, resume with the original operations that the user was attempting to do.
+1. **Classify.** Capture the failing operation and the non-secret error response. Confirm it is an authentication failure (`401`, a missing or expired sign-in) or a missing install, rather than validation, a missing or wrong `x-readme-subdomain`, insufficient permissions, plan restrictions, or a service outage.
+   **Done:** There is an authentication failure or missing install to repair, or the error is handed back to its owning workflow.
+2. **Identify the client.** Establish the client and surface you are running in (for example Claude Code versus Claude Desktop Chat). You commonly have this information already; ask if unclear. Read only the matching [client connection reference](CLIENTS.md).
+   **Done:** You know the client and surface, and have read its reference.
+3. **Connect.** Run the [installed check](#installed-check) and install only what is missing. Then have the user sign in through their client as the reference describes.
+   **Done:** Nothing is missing and the user confirms sign-in is complete.
+4. **Verify and resume.** Call `GET https://api.readme.com/v2/projects/me` through `execute-request` with the `x-readme-subdomain` header, and confirm it returns the intended project. Resume the user's original operation.
    **Done:** The intended project is reachable and the original workflow resumes, or the unresolved error is reported without repeated guesses.
 
-## First time account setup
+## First-time account setup
 
-New accounts and projects are created through the `setup-project` skill - follow it rather than creating an account from here. If the user has an existing account, they must create their project via the UI and provide the API Key.
+New accounts and projects are created through the `setup-project` skill. A user with an existing account creates their project in the ReadMe UI, signs in with OAuth, and gives you the project's subdomain.
 
-## Authentication scope
+## Cloud agents
 
-ReadMe API keys are scoped to a single project only. To edit multiple projects, it is recommended that you set up multiple MCP clients under different names - ie "docs-projectNameA", "docs-projectNameB" and set these up with their individual, project-based API keys.
-
-ReadMe does not currently offer OAuth via MCP.
-
-## Cloud Agents
-
-If you are running in a cloud or remote sandbox (e.g. Claude Code on the web, Codex cloud, Cursor background agents), do not install plugins or write MCP config inside the sandbox. It is temporary and is not the user's app config. Direct the user to configure the plugin/connector and API key through the app's own settings, then follow the UI steps in the matching client reference.
+A cloud or remote sandbox (e.g. Claude Code on the web, Codex cloud, Cursor background agents) is temporary and is not the user's app config, so leave its plugins and MCP config as they are. Direct the user to install the plugin and sign in through the app's own settings, following the UI steps in the matching client reference.
