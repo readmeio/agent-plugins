@@ -9,7 +9,7 @@ Note - these settings are only configurable via the ReadMe MCP Server - BiDi syn
 
 ## Workflow
 
-1. **Target.** Retrieve the current project via `execute-request` with `GET https://api.readme.com/v2/projects/me` and confirm it is the project the user means. Note `parent` (enterprise) and `plan.type`.
+1. **Target.** Identify the project as the `managing-readme-docs` skill describes (with OAuth, every request sends its `x-readme-subdomain`). Retrieve it via `execute-request` with `GET https://api.readme.com/v2/projects/me` and confirm it is the project the user means. Note `parent` (enterprise) and `plan.type`.
    **Done:** The intended project is confirmed and its current settings are in hand.
 2. **Locate.** Match the request to a category and read its corresponding category file. When the user asks broadly (e.g. "what can I change about my styling?"), offer that category's common operations. Inspect the `updateProject` schema with `get-endpoint` for the exact fields.
    **Done:** Every requested change maps to a schema field or to a named dashboard-only action.

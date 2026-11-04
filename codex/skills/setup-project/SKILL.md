@@ -1,21 +1,23 @@
 ---
 name: setup-project
-description: Create a new ReadMe Docs project, including new account creation for those without an existing account.
+description: Create a new ReadMe Docs project, for a signed-in user or together with a new ReadMe account. Use during first-time setup on ReadMe or when the user wants another project.
 ---
 
 # Set up a ReadMe project
 
-This skill walks through the steps to setup a new ReadMe project, including the available options and required MCP configuration.
+This skill walks through setting up a new ReadMe project: creating the account and project, gathering content and styling, and seeding the first content.
 
 ## Requirements
 
-- This skill assumes that the ReadMe MCP server has been configured. If you do not have the ReadMe MCP available, you must first follow the steps in the `mcp-auth` skill for the specific client and setup the ReadMe MCP server before you can setup a new ReadMe project. Note that you don't need to connect up to an actual project if the user is creating a new account.
-- Currently new project setup is only allowed if the user does not have an existing ReadMe account. If the user has an existing account, they must create their new project in the ReadMe UI, sign in with OAuth (see `mcp-auth`), and give you the project's subdomain. In Cursor, they set the project's API key instead of signing in with OAuth. They must use the `ai_onboarding` endpoint to make their new account and then they can use the api key returned from that endpoint to continue with account + project setup. For clients with OAuth the user should make their account via the UI instead.
+- The ReadMe MCP server must be available. If it isn't, first follow the `mcp-auth` skill for the user's client.
+- Choose the creation path by how the client authenticates:
+  - **OAuth (default, every client except Cursor):** the user signs in with their ReadMe account, and can create and manage any number of projects. A user without an account creates one in the ReadMe UI when their client prompts them to sign in. Create the project with `POST /v2/projects/me`.
+  - **Cursor:** Cursor can't sign in with OAuth, so it uses a project API key (see `mcp-auth`). A user without an account gets the account and its first project from `POST /v2/projects/ai_onboarding`. A user with an existing account creates the project in the ReadMe UI and sets that project's API key.
+- Call `ai_onboarding` only on the Cursor path. With OAuth, the user creates their account through the sign-in prompt.
 
 **Done**
-- You are connected to the ReadMe MCP server
-- You have confirmed that the user is creating this project with a new account, OR if they have an existing account they've manually created it in the UI and given you its subdomain:
-  - You should have used `execute-request` on the `/v2/projects/me` endpoint with the `x-readme-subdomain` header and have confirmed that it is the right project
+- You are connected to the ReadMe MCP server.
+- You know the creation path: OAuth, Cursor with a new account, or Cursor with an existing account.
 
 ## Workflow
 
@@ -66,13 +68,12 @@ When the user has either:
 - Provided styling content; or
 - Has said that they don't have any content to give you
 
-#### Gather Account + Project Information (Optional)
+#### Gather Account + Project Information
 
-IF the user is creating a new account + project, then you also need:
+You need the project's name. On the Cursor path with a new account, you also need:
 
 - The user's name
 - The user's email
-- The project's name
 
 Instruct the user its VERY important that they have access to this email:
 
@@ -106,25 +107,38 @@ The user has agreed to the initial content plan.
 
 ### 3. Execute on the plan
 
-Execute on the content plan that you have agreed on with the user. Ensure that you understand whether the user needs a new account created, or if they have given you the subdomain of an existing project.
+Create the project on the path chosen in [Requirements](#requirements), following its steps in order before doing any of the content plan.
 
-#### If Creating a new Project + Account
+#### With OAuth
 
-Only create an account if the user has confirmed they want to create a new account/they don't have a ReadMe account. If they have an existing account they must create their project via the UI and give you its subdomain.
+1. **Sign in.** Call `GET https://api.readme.com/v2/users/me/projects` via `execute-request`. If the client prompts the user to sign in, ask them to complete it, creating a ReadMe account from the sign-in page if they don't have one. Wait until they confirm, then retry.
+2. **Check for an existing project.** If a returned project looks like the one the user wants, ask them by project name whether to use it instead of creating another.
+3. **Create the project.** Look up the request with `get-endpoint`, then send `POST https://api.readme.com/v2/projects/me` with the project name.
+4. **Target the new project.** Send the new project's subdomain from the response as the `x-readme-subdomain` header on every request. Confirm with `GET https://api.readme.com/v2/projects/me`, and tell the user the project is empty for now and content will appear as you work on it.
+5. **Execute the content plan.**
 
-Follow these steps in order, before doing any of the content plan:
+#### Cursor with a new account
+
+Only create an account if the user has confirmed they don't have a ReadMe account.
 
 1. **Create the account.** Execute a POST `/v2/projects/ai_onboarding` via the `execute-request` tool from the ReadMe MCP.
    - If the request rejects the email, do NOT retry with an email you have changed or made up. Stop and ask the user, and only retry with the exact email they give you. ReadMe returns the same error for both causes, so tell the user both possibilities:
-     - An account already exists for this email. They must sign in via the ReadMe UI to create their new project, then give you its subdomain.
+     - An account already exists for this email. Continue with [Cursor with an existing account](#cursor-with-an-existing-account).
      - The email is invalid. They must give you a different email that they have access to.
 2. **Give the user their sign-in URL straight away.** Ask them to sign in with it and tell you once they have. Tell them:
    - The URL can only be used once, and expires after 1 week.
    - The project is empty for now, and they will see content appear as you work on it.
    - They will eventually need to verify their email before publishing the project, but this does not block anything now.
 3. **Wait** until the user confirms they have signed in successfully.
-4. **Target the new project.** Send the `subdomain` returned when the account was created as the `x-readme-subdomain` header on every request. If the client asks the user to sign in, they sign in with the account they just created. In Cursor, which uses project API keys, give the user the `token` returned when the account was created and have them set it as the ReadMe API key under the plugin's **Configure**.
+4. **Set the API key.** Give the user the `token` returned when the account was created, and have them set it as the ReadMe API key under the plugin's **Configure**. Don't send `x-readme-subdomain`; the key selects the project.
 5. **Execute the content plan.**
+
+#### Cursor with an existing account
+
+1. **Create the project in the UI.** The user creates the project in the ReadMe UI, then creates an API key for it under **Settings → API Keys** (append `#/settings/api-keys` to any URL on their docs domain).
+2. **Set the API key.** The user sets it as the ReadMe API key under the plugin's **Configure**. Don't send `x-readme-subdomain`; the key selects the project.
+3. **Confirm the project.** Call `GET https://api.readme.com/v2/projects/me` and check it is the new project.
+4. **Execute the content plan.**
 
 ## Intake branches
 

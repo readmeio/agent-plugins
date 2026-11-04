@@ -11,10 +11,10 @@ Cursor authenticates with a ReadMe project API key, not OAuth. This is a known C
 Until Cursor fixes it, the API key is the standard Cursor setup, so offer it without waiting for the user to ask:
 
 - The user creates the key in their project under **Settings → API Keys** (append `#/settings/api-keys` to any URL on their docs domain).
-- A key reaches one project. `x-readme-subdomain` is optional; when sent, it must match the key's project.
+- A key reaches one project. Don't send `x-readme-subdomain`; the key selects the project.
 - To work on a different project, the user replaces the key under the plugin's **Configure**.
 
-**Note: For new accounts they should be created with the `ai_onboarding` endpoint before continuing.
+**Note:** New accounts are created with the `ai_onboarding` endpoint before continuing (see the `setup-project` skill).
 
 ## Install the ReadMe Plugin
 

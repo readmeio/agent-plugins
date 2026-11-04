@@ -31,13 +31,15 @@ Both are expected. When a prompt appears, ask the user to complete sign-in in th
 
 ### Choosing the project
 
-Select the project on every `execute-request` call to `https://api.readme.com/v2/...` with the `x-readme-subdomain` header. OAuth requests require it.
+With OAuth, select the project on every `execute-request` call to `https://api.readme.com/v2/...` with the `x-readme-subdomain` header. OAuth requests require it.
 
 ```json
 "headers": [{ "name": "x-readme-subdomain", "value": "<project-subdomain>" }]
 ```
 
-Take the subdomain from the user, or from their docs URL (`https://<subdomain>.readme.io`). No endpoint lists a user's projects, so ask when the project is unclear. To work across several projects, change the header value per request; the one connection covers all of them.
+Identify the project as the `managing-readme-docs` skill describes: list the user's projects with `GET https://api.readme.com/v2/users/me/projects`, and when the project is unclear, ask the user by project name rather than subdomain. To work across several projects, change the header value per request; the one connection covers all of them.
+
+With a project API key, don't send `x-readme-subdomain`; the key selects its project.
 
 ### Project API keys
 
@@ -46,7 +48,7 @@ Offer a project API key only when the user asks for API key authentication, or t
 - The user creates the key in their project under **Settings → API Keys** (append `#/settings/api-keys` to any URL on their docs domain).
 - The key is sent as an `Authorization: Bearer <key>` header on the MCP server, set through the client's own MCP settings. Have the user enter it there themselves so the key stays out of the chat.
 - This is a separate MCP server entry from the plugin's. Have the user disable the plugin's ReadMe MCP server so the two don't duplicate.
-- `x-readme-subdomain` is optional with a key. When sent, it must match the key's project.
+- Don't send `x-readme-subdomain` with a key.
 
 ## Workflow
 
@@ -56,12 +58,12 @@ Offer a project API key only when the user asks for API key authentication, or t
    **Done:** You know the client and surface, and have read its reference.
 3. **Connect.** Run the [installed check](#installed-check) and install only what is missing. Then have the user sign in through their client as the reference describes.
    **Done:** Nothing is missing and the user confirms sign-in is complete.
-4. **Verify and resume.** Call `GET https://api.readme.com/v2/projects/me` through `execute-request` with the `x-readme-subdomain` header, and confirm it returns the intended project. Resume the user's original operation.
+4. **Verify and resume.** Call `GET https://api.readme.com/v2/projects/me` through `execute-request` (with the `x-readme-subdomain` header under OAuth), and confirm it returns the intended project. Resume the user's original operation.
    **Done:** The intended project is reachable and the original workflow resumes, or the unresolved error is reported without repeated guesses.
 
 ## First-time account setup
 
-New accounts and projects are created through the `setup-project` skill. A user with an existing account creates their project in the ReadMe UI, signs in with OAuth, and gives you the project's subdomain.
+New accounts and projects are created through the `setup-project` skill. With OAuth, a user without a ReadMe account creates one in the ReadMe UI when their client prompts them to sign in.
 
 ## Cloud agents
 
