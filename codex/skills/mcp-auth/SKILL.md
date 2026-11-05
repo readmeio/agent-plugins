@@ -31,7 +31,7 @@ Both are expected. When a prompt appears, ask the user to complete sign-in in th
 
 ### Choosing the project
 
-With OAuth, select the project on every `execute-request` call to `https://api.readme.com/v2/...` with the `x-readme-subdomain` header. OAuth requests require it.
+With OAuth, select the project on every project-scoped `execute-request` call to `https://api.readme.com/v2/...` with the `x-readme-subdomain` header. OAuth requests to a project require it. User-scoped endpoints that aren't about one project, such as `GET https://api.readme.com/v2/users/me/projects`, don't take the header.
 
 ```json
 "headers": [{ "name": "x-readme-subdomain", "value": "<project-subdomain>" }]

@@ -43,11 +43,13 @@ agent-plugins/
 │   ├── .claude-plugin/plugin.json
 │   ├── .mcp.json
 │   ├── skills/                       # Frozen snapshot of ../skills, re-synced by hand
+│   ├── assets/icon.svg
 │   └── README.md
 ├── codex/
 │   ├── plugin.json                   # Agent Plugins 1.0.0 manifest
 │   ├── mcp.json
 │   ├── skills/                       # Generated from ../skills
+│   ├── assets/                       # icon.svg, logo.svg
 │   └── README.md
 ├── scripts/
 ├── README.md
@@ -56,10 +58,10 @@ agent-plugins/
 
 ## Skills
 
-The three skills are agent-agnostic: anything a client does differently — registering an API key,
-driving a browser, installing the plugin by hand — is a per-client table inside the shared file, so
-there is one copy of every fact. They carry only what the MCP server cannot tell an agent at
-runtime; route maps come from `list-endpoints` and `get-endpoint`, not from a skill.
+The skills are agent-agnostic. Anything a client does differently, such as installing the plugin or
+signing in, lives in a per-client reference under `skills/mcp-auth/clients/`, so there is one copy
+of every fact. Skills carry only what the MCP server cannot tell an agent at runtime; route maps
+come from `list-endpoints` and `get-endpoint`, not from a skill.
 
 Edit `skills/` and nothing else, then regenerate the Codex and Cursor copies:
 
@@ -80,15 +82,19 @@ rm -rf claude/skills && cp -R skills claude/skills
 
 ## Authentication
 
-All three plugins talk to the same endpoint, `https://docs.readme.com/mcp`. Without a key you get
-read-only access to public docs. Writes through `execute-request` need a ReadMe API key, and each
-client wires that credential differently.
+All three plugins talk to the same endpoint, `https://docs.readme.com/mcp`.
 
-Cursor declares `README_API_KEY` as a plugin variable and prompts for it on install (or under
-**Plugins → Configure**). Claude and Codex cannot put secrets in a plugin MCP config — the Agent
-Plugins spec requires headers to be literal package data, and Codex strips `Authorization` anyway
-— so those clients still ship anonymous and the user registers the server themselves. Each plugin
-README has the exact steps.
+- **Claude and Codex** sign in with OAuth. The user signs in with their ReadMe account when the
+  client prompts, and one sign-in covers every project the account can reach. Requests pick the
+  project with the `x-readme-subdomain` header. These plugins ship no credentials and never read
+  keys from the user's machine.
+- **Cursor** uses a project API key. Cursor never opens the sign-in page when a server asks for it
+  on a later request rather than on connect, so OAuth doesn't work there yet. The plugin declares
+  `README_API_KEY` as a plugin variable and prompts for it on install (or under the plugin's
+  **Configure**). A key reaches one project, so no `x-readme-subdomain` header is sent.
+
+Clients without OAuth support can use a project API key, entered by the user in the client's own
+MCP settings. The `mcp-auth` skill has the steps for each client.
 
 ## License
 

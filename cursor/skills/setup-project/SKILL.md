@@ -114,7 +114,7 @@ Create the project on the path chosen in [Requirements](#requirements), followin
 1. **Sign in.** Call `GET https://api.readme.com/v2/users/me/projects` via `execute-request`. If the client prompts the user to sign in, ask them to complete it, creating a ReadMe account from the sign-in page if they don't have one. Wait until they confirm, then retry.
 2. **Check for an existing project.** If a returned project looks like the one the user wants, ask them by project name whether to use it instead of creating another.
 3. **Create the project.** Look up the request with `get-endpoint`, then send `POST https://api.readme.com/v2/projects/me` with the project name.
-4. **Target the new project.** Send the new project's subdomain from the response as the `x-readme-subdomain` header on every request. Confirm with `GET https://api.readme.com/v2/projects/me`, and tell the user the project is empty for now and content will appear as you work on it.
+4. **Target the new project.** Send the new project's subdomain from the response as the `x-readme-subdomain` header on every project-scoped request. Confirm with `GET https://api.readme.com/v2/projects/me`, and tell the user the project is empty for now and content will appear as you work on it.
 5. **Execute the content plan.**
 
 #### Cursor with a new account

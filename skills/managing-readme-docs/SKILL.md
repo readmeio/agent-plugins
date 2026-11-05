@@ -49,7 +49,7 @@ ReadMe documentation is git-backed, meaning that ReadMe supports:
 
 How the project is chosen depends on how the user authenticated. Assume OAuth unless you are in Cursor or the user has set up a project API key.
 
-- **OAuth (default):** one sign-in reaches every project the user can access. Send the project's subdomain as the `x-readme-subdomain` header on every `execute-request` call to `https://api.readme.com/v2/...`; OAuth requests require it. To switch project, change the header value.
+- **OAuth (default):** one sign-in reaches every project the user can access. Send the project's subdomain as the `x-readme-subdomain` header on every project-scoped `execute-request` call to `https://api.readme.com/v2/...`; OAuth requests to a project require it. User-scoped endpoints that aren't about one project, such as `GET https://api.readme.com/v2/users/me/projects`, don't take the header. To switch project, change the header value.
 - **Project API key (Cursor, or when the user set one up):** the key selects its project. Don't send `x-readme-subdomain`.
 
 With OAuth, identify the project before the first request that needs it:
