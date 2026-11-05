@@ -39,27 +39,16 @@ Find **readme** in the list and click **Install**. Open it afterwards to see its
 Type `/` in a chat or click **+** to pick a ReadMe skill. No restart is needed. Click **Update** on the marketplace to pull new versions.
 
 Notes:
-- The ReadMe connector runs from Anthropic's cloud, not your machine, so an API key exported in your shell is not picked up here. Read tools work on public projects. Write tools need an authenticated connection, which this plugin cannot provide on these surfaces yet.
+- To sign in, open the plugin's **Connectors** tab, click **Connect** on the ReadMe connector, keep the default settings and sign in with your ReadMe account.
 - On Team and Enterprise plans an owner may have turned off personal marketplaces. Ask them to add this marketplace under **Organization settings → Plugins**.
 - Claude cannot install the plugin for you on these surfaces. If you paste a ReadMe skill into a chat before installing, it will walk you through the steps above.
 
 ---
 
 ## 🔑 Authentication
-The plugin connects to the ReadMe MCP server anonymously. Read tools work on public projects without any setup. Write tools such as `update-docs` need your project's **API key**, found under **Configuration → API Keys** in your ReadMe dashboard.
+The plugin signs in to the ReadMe MCP server with OAuth. Your client asks you to sign in with your ReadMe account, either when the server connects or on the first request that needs it. One sign-in covers every project your account can reach.
 
-The plugin cannot read the key itself. In Claude Code, register the server once under the same name, which replaces the plugin's anonymous one:
-
-```
-export README_API_KEY=rdme_…
-claude mcp add --scope user --transport http readme https://docs.readme.com/mcp --header 'Authorization: Bearer ${README_API_KEY}'
-```
-
-Keep the single quotes so Claude Code expands the variable at startup instead of writing the key into its config. Export `README_API_KEY` in the shell that launches Claude Code, then restart it. The skills keep working because the server name is unchanged.
-
-One key maps to one project. To switch projects, change the exported key and restart.
-
-Claude Desktop Chat, Cowork and claude.ai cannot take an API key, so the plugin stays read-only there.
+The plugin never reads API keys or other credentials from your machine. If you need a project API key instead of OAuth, the `mcp-auth` skill walks you through adding it in your client's own MCP settings.
 
 ---
 
@@ -67,6 +56,9 @@ Claude Desktop Chat, Cowork and claude.ai cannot take an API key, so the plugin 
 
 | Skill | What it does |
 | ----- | ------------ |
-| `mcp-server` | Keeps the agent straight on which project and which spec a call lands in: this server reads ReadMe's own docs, while `execute-request` plus your key acts on yours |
-| `mcp-auth` | Establishes which key is in play and diagnoses the failures a missing or unresolved one produces |
-| `onboarding` | Walks a new customer from signup to a published hub and a working API key |
+| `managing-readme-docs` | Shared reference for working on a ReadMe project: MCP routing, project sections, BiDi Sync, and confirming the active project and branch |
+| `mcp-auth` | Installs the plugin and MCP server, and signs in when a request fails authentication |
+| `setup-project` | Creates a new ReadMe project, for a signed-in user or together with a new account |
+| `edit-page-content` | Creates and edits guides, API reference prose, changelogs, recipes and custom pages |
+| `manage-navigation` | Organizes the sidebar: categories, page order, titles and URLs |
+| `update-project-settings` | Views and updates project settings such as appearance, AI, SEO, access, domains and integrations |

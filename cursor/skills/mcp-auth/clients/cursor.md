@@ -2,25 +2,36 @@
 
 Applies to the Cursor IDE, Cursor web, and the Cursor CLI (`agent`). A plugin installed at user scope in any one is available in the others. Install the plugin once. Cursor web follows the same steps as the Cursor UI below.
 
-## Install the ReadMe Plugin
+The plugin includes the ReadMe MCP server, so installing the plugin is the whole setup.
 
-*Note: Only do this if the user does not already have the ReadMe plugin available.*
+## Authentication uses a project API key
+
+Cursor authenticates with a ReadMe project API key, not OAuth. This is a known Cursor bug that Cursor must fix: when an MCP server accepts the connection and asks for sign-in only on a later request (ReadMe asks on the first `execute-request`), Cursor never opens the sign-in page.
+
+Until Cursor fixes it, the API key is the standard Cursor setup, so offer it without waiting for the user to ask:
+
+- The user creates the key in their project under **Settings → API Keys** (append `#/settings/api-keys` to any URL on their docs domain).
+- A key reaches one project. Don't send `x-readme-subdomain`; the key selects the project.
+- To work on a different project, the user replaces the key under the plugin's **Configure**.
+
+**Note:** New accounts are created with the `ai_onboarding` endpoint before continuing (see the `setup-project` skill).
+
+## Install the ReadMe Plugin
 
 ### Cursor UI
 
 1. Open **Customize** in the sidebar.
 2. Search for **ReadMe**.
 3. Find the "Readme" plugin with author "ReadMe" and select **Add**.
-4. If the user is working on an existing project (they may be setting up a new project for the first time) set the **ReadMe API key** when prompted - this can be left blank for the moment. The user can acess this key via **Settings → API Keys** in their ReadMe project. 
-  1. It can be set later by navigating to the ReadMe plugin in the UI and selecting **Configure**.
+4. Set the **ReadMe API key** when prompted. It can be left blank for now and set later by opening the ReadMe plugin and selecting **Configure**.
 
-*NOTE: For first-time setup on ReadMe, the user may be creating a new project. If they are, they will not yet have their API key. In that case leave the api key as a placeholder and when the user creates their project the user/you can modify the configuration with the actual API key.*
+*NOTE: For first-time setup on ReadMe, the user may be creating a new project and will not have an API key yet. Leave it blank, and set it once the project exists (the `setup-project` skill covers this).*
 
 In the IDE chat, running the command `/add-plugin readme` will also do the same.
 
-### Cursor CLI - `agent` (Not recommended)
+### Cursor CLI - `agent`
 
-The ReadMe plugin can be installed from a running `agent` session - this must be performed by an agent.
+The ReadMe plugin can be installed from a running `agent` session.
 
 1. Start `agent`
 2. Run the `/plugin` slash command
@@ -28,8 +39,8 @@ The ReadMe plugin can be installed from a running `agent` session - this must be
 4. Search for "readme"
 5. Select "ReadMe" from the Cursor Plugin Marketplace
   1. Here you can select to install for yourself (user scope) or for the project you are in (project scope). If you are working in a BiDi synced repository, it is recommended to use project scope, but for MCP it is best to use the user scope.
-6. You must configure your API key via the Cursor Application - the agent does not expose any way to add environment keys to config. This is why this configuration method is not recommended.
+6. Set the API key in the Cursor app (ReadMe plugin → **Configure**). The `agent` CLI has no way to set plugin variables.
 
 ### Confirmation
 
-Confirm that the ReadMe plugin is installed, that its skills are available, and that you can list tools from its MCP server. The user may need to reload the window or start a new session before the install is recognized.
+Confirm that the ReadMe plugin is installed, that its skills are available, and that you can list tools from its MCP server. The user may need to reload the window or start a new session before the install or key change is recognized.
