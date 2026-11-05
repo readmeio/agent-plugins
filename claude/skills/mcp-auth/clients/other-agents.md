@@ -36,15 +36,9 @@ This takes the same `-g` and `-a <agent>` flags. Agents that support MCP OAuth p
 
 ### Agents without OAuth support
 
-An agent that cannot sign in with OAuth uses a project API key instead (see Project API keys in the main skill). The user should run this themselves in a terminal. `add-mcp` prompts for `README_API_KEY`, so the key never enters the chat or shell history:
+An agent that cannot sign in with OAuth uses a project API key instead (see Project API keys in the main skill). After adding the server above, the user adds an `Authorization: Bearer <api-key>` header to the `readme` entry in the agent's own MCP settings or config file. The user enters the key there themselves, so it stays out of the chat and shell history.
 
-```sh
-npx add-mcp "https://docs.readme.com/mcp" --name readme --header 'Authorization: Bearer ${README_API_KEY}'
-```
-
-Keep the single quotes so the shell does not expand the variable. Re-running with the same name replaces the anonymous `readme` entry.
-
-The key may be written into the agent's config file. With project scope, check that file is not committed; prefer `-g` when adding a key.
+With project scope, the config file lives in the project. Check that it is not committed; prefer `-g` when adding a key.
 
 ### Confirmation
 
