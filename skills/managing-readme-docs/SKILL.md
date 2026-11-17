@@ -1,6 +1,6 @@
 ---
 name: managing-readme-docs
-description: Shared reference for working on a ReadMe project, covering MCP routing, project sections, Git-backed docs (BiDi Sync), and confirming the active project and branch. Use before reading or changing documentation hosted on ReadMe.
+description: Shared reference for working on a ReadMe project, covering MCP routing, project sections, Git-backed docs (BiDi Sync), file uploads, and confirming the active project and branch. Use before reading or changing documentation hosted on ReadMe.
 ---
 
 # Working on a ReadMe project
@@ -76,6 +76,16 @@ If you are in a documentation repository, use git to manage documentation via Bi
 Note - project settings (styling etc.) must be managed via MCP or via UI, there is no BiDi Sync for these.
 
 Consult the [BiDi Sync](https://docs.readme.com/main/docs/bi-directional-sync) documentation for more information on bi-directional sync.
+
+## Uploading files
+
+MCP can't carry a file. A file reaches ReadMe as a string inside the `execute-request` call, and the MCP server builds the multipart request from it. Pick the route by where the file lives:
+
+- **Hosted file:** send a multipart `url` param with the file's public URL, and ReadMe fetches it. This is the best route for an API definition: nothing large passes through the call, and the content arrives exactly as published.
+- **Local text file (JSON, YAML):** send a multipart param whose `value` is the full file contents, with `fileName` (e.g. `openapi.json`) and `contentType` (e.g. `application/json`). `fileName` makes the param a file part and names what ReadMe stores, such as the API definition's filename. Copy the contents exactly: when you can run code that calls MCP tools, have the code read the file into `value`, then check its length matches the file.
+- **Binary file, or one you can't copy into `value` exactly:** upload it outside MCP, with `rdme openapi upload` (needs a project API key) or `curl`. `value` is always sent as text, so base64 or a data URL is stored as that literal text.
+
+API definitions finish processing after the upload returns. Call `GET` on the returned `uri` (under `https://api.readme.com/v2`) until `upload.status` is `done`, then check the stored `schema` matches the file.
 
 ## Detailed Workflows
 
