@@ -15,21 +15,17 @@ For a local checkout, pass the checkout path to `codex plugin marketplace add` i
 
 ## Authentication
 
-Public read access works without any setup.
+The plugin signs in to the ReadMe MCP server with OAuth. ChatGPT or Codex asks you to sign in with your ReadMe account, either when the server connects or on the first request that needs it. One sign-in covers every project your account can reach.
 
-Write tools such as `update-docs` need your ReadMe API key. Codex strips `Authorization` headers from plugin MCP configs, so register the server yourself once with the key read from an environment variable:
-
-```
-export README_API_KEY=rdme_…
-codex mcp add readme --url https://docs.readme.com/mcp --bearer-token-env-var README_API_KEY
-```
-
-Your `readme` entry replaces the plugin's anonymous one. The skills keep working because the server name is unchanged. Find your key under **Configuration → API Keys** in your ReadMe project dashboard.
+The plugin never reads API keys or other credentials from your machine. If you need a project API key instead of OAuth, the `mcp-auth` skill walks you through adding it in your client's own MCP settings.
 
 ## Skills
 
 | Skill | What it does |
 | ----- | ------------ |
-| `mcp-server` | Keeps the agent straight on which project and which spec a call lands in: this server reads ReadMe's own docs, while `execute-request` plus your key acts on yours |
-| `mcp-auth` | Establishes which key is in play and diagnoses the failures a missing or unresolved one produces |
-| `onboarding` | Walks a new customer from signup to a published hub and a working API key |
+| `managing-readme-docs` | Shared reference for working on a ReadMe project: MCP routing, project sections, BiDi Sync, and confirming the active project and branch |
+| `mcp-auth` | Installs the plugin and MCP server, and signs in when a request fails authentication |
+| `setup-project` | Creates a new ReadMe project, for a signed-in user or together with a new account |
+| `edit-page-content` | Creates and edits guides, API reference prose, changelogs, recipes and custom pages |
+| `manage-navigation` | Organizes the sidebar: categories, page order, titles and URLs |
+| `update-project-settings` | Views and updates project settings such as appearance, AI, SEO, access, domains and integrations |
